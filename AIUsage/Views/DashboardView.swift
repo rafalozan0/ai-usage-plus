@@ -12,14 +12,17 @@ struct DashboardView: View {
     var openSettings: @MainActor () -> Void = {}
 
     var body: some View {
-        GlassEffectContainer(spacing: 10) {
-            DashboardContentView(
-                store: store,
-                usageDisplayMode: $usageDisplayMode
-            )
-                .safeAreaBar(edge: .bottom, spacing: 0) {
-                    footer
-                }
+        // Keep the container on the footer only. One spanning the scroll view
+        // lets the provider cards' glass escape the scroll clip and draw over
+        // the header and footer.
+        DashboardContentView(
+            store: store,
+            usageDisplayMode: $usageDisplayMode
+        )
+        .safeAreaBar(edge: .bottom, spacing: 0) {
+            GlassEffectContainer(spacing: 10) {
+                footer
+            }
         }
         .frame(width: 392)
         .onAppear {
