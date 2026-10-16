@@ -19,12 +19,16 @@ project_path="$repository_directory/AIUsage.xcodeproj"
 derived_data_directory="$repository_directory/DerivedData-Release"
 artifact_directory="$repository_directory/dist/v$version"
 release_notes="$repository_directory/docs/releases/$version.md"
-built_application="$derived_data_directory/Build/Products/Release/AI Usage.app"
-application_binary="$built_application/Contents/MacOS/AI Usage"
+application_name="AI Usage Plus"
+disk_image_name="AI-Usage-Plus"
+repository_url="https://github.com/rafalozan0/ai-usage-menubar"
+built_application="$derived_data_directory/Build/Products/Release/$application_name.app"
+application_binary="$built_application/Contents/MacOS/$application_name"
 sparkle_framework="$built_application/Contents/Frameworks/Sparkle.framework"
-disk_image="$artifact_directory/AI-Usage.dmg"
-checksum="$artifact_directory/AI-Usage.dmg.sha256"
-sparkle_account="ai-usage-menubar"
+disk_image="$artifact_directory/$disk_image_name.dmg"
+checksum="$artifact_directory/$disk_image_name.dmg.sha256"
+sparkle_account="ai-usage-plus"
+sparkle_key_file="${SPARKLE_ED_KEY_FILE:-}"
 
 if [[ ! -f "$release_notes" ]]; then
     printf 'Missing release notes: %s\n' "$release_notes" >&2
@@ -36,7 +40,7 @@ xcode_major="$(
         awk 'NR == 1 { split($2, parts, "."); print parts[1] }'
 )"
 if [[ -z "$xcode_major" || "$xcode_major" -lt 27 ]]; then
-    printf 'AI Usage releases require Xcode 27 or newer.\n' >&2
+    printf '%s releases require Xcode 27 or newer.\n' "$application_name" >&2
     exit 1
 fi
 
@@ -56,7 +60,20 @@ if [[ "$configured_version" != "$version" ]]; then
     exit 1
 fi
 
+# Signing modes:
+#   developer-id  Developer ID Application certificate; can be notarized.
+#   self-signed   Any other identity (for example a stable self-signed
+#                 certificate). Keeps the code signing identity stable across
+#                 releases so Keychain "Always Allow" grants survive updates,
+#                 but cannot be notarized.
+#   ad-hoc        No identity. Every build gets a new signature.
 codesign_identity="${AI_USAGE_CODESIGN_IDENTITY:-}"
+codesign_keychain="${AI_USAGE_CODESIGN_KEYCHAIN:-}"
+keychain_arguments=()
+if [[ -n "$codesign_keychain" ]]; then
+    keychain_arguments+=(--keychain "$codesign_keychain")
+fi
+
 if [[ -z "$codesign_identity" ]]; then
     codesign_identity="$(
         security find-identity -v -p codesigning 2>/dev/null |
@@ -64,24 +81,50 @@ if [[ -z "$codesign_identity" ]]; then
     )"
 fi
 
-build_settings=()
-if [[ -n "$codesign_identity" ]]; then
-    printf 'Building a universal Developer ID signed app…\n'
-    build_settings+=(
-        "CODE_SIGN_STYLE=Manual"
-        "CODE_SIGN_IDENTITY=$codesign_identity"
-        "CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO"
-    )
+if [[ -z "$codesign_identity" ]]; then
+    signing_mode="ad-hoc"
+elif security find-identity -p codesigning ${codesign_keychain:+"$codesign_keychain"} 2>/dev/null |
+    grep -F "$codesign_identity" |
+    grep -q 'Developer ID Application:'; then
+    signing_mode="developer-id"
 else
-    printf 'Building a universal ad-hoc signed app…\n'
-    printf \
-        'Warning: no Developer ID Application identity was found; this build cannot be notarized.\n' \
-        >&2
-    build_settings+=(
-        "CODE_SIGN_STYLE=Automatic"
-        "ENABLE_HARDENED_RUNTIME=NO"
-    )
+    signing_mode="self-signed"
 fi
+
+build_settings=()
+case "$signing_mode" in
+    developer-id)
+        printf 'Building a universal Developer ID signed app…\n'
+        build_settings+=(
+            "CODE_SIGN_STYLE=Manual"
+            "CODE_SIGN_IDENTITY=$codesign_identity"
+            "CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO"
+        )
+        if [[ -n "$codesign_keychain" ]]; then
+            build_settings+=("OTHER_CODE_SIGN_FLAGS=--keychain $codesign_keychain")
+        fi
+        ;;
+    self-signed)
+        # Xcode refuses untrusted identities, so build ad-hoc and re-sign
+        # every nested component below. Hardened Runtime stays off: without
+        # a Team ID, library validation would reject Sparkle.framework.
+        printf 'Building a universal app for self-signed distribution…\n'
+        build_settings+=(
+            "CODE_SIGN_STYLE=Automatic"
+            "ENABLE_HARDENED_RUNTIME=NO"
+        )
+        ;;
+    ad-hoc)
+        printf 'Building a universal ad-hoc signed app…\n'
+        printf \
+            'Warning: no signing identity was found; Keychain grants will not survive updates.\n' \
+            >&2
+        build_settings+=(
+            "CODE_SIGN_STYLE=Automatic"
+            "ENABLE_HARDENED_RUNTIME=NO"
+        )
+        ;;
+esac
 
 xcodebuild \
     -quiet \
@@ -100,15 +143,27 @@ if [[ ! -d "$built_application" ]]; then
     exit 1
 fi
 
-if [[ -n "$codesign_identity" ]]; then
-    printf 'Signing Sparkle helpers for Developer ID distribution…\n'
-    sparkle_version="$sparkle_framework/Versions/B"
-    codesign_options=(
+codesign_options=()
+if [[ "$signing_mode" == "developer-id" ]]; then
+    codesign_options+=(
         --force
         --sign "$codesign_identity"
+        ${keychain_arguments[@]+"${keychain_arguments[@]}"}
         --options runtime
         --timestamp
     )
+elif [[ "$signing_mode" == "self-signed" ]]; then
+    codesign_options+=(
+        --force
+        --sign "$codesign_identity"
+        ${keychain_arguments[@]+"${keychain_arguments[@]}"}
+        --timestamp=none
+    )
+fi
+
+if [[ "$signing_mode" != "ad-hoc" ]]; then
+    printf 'Signing Sparkle helpers and the app (%s)…\n' "$signing_mode"
+    sparkle_version="$sparkle_framework/Versions/B"
 
     /usr/bin/codesign \
         "${codesign_options[@]}" \
@@ -150,7 +205,7 @@ feed_url="$(
         -c 'Print :SUFeedURL' \
         "$built_application/Contents/Info.plist"
 )"
-expected_feed_url="https://raw.githubusercontent.com/burakgon/ai-usage-menubar/main/appcast.xml"
+expected_feed_url="https://raw.githubusercontent.com/rafalozan0/ai-usage-menubar/main/appcast.xml"
 if [[ "$feed_url" != "$expected_feed_url" ]]; then
     printf 'Unexpected Sparkle feed URL: %s\n' "$feed_url" >&2
     exit 1
@@ -176,9 +231,25 @@ embedded_public_key="$(
         -c 'Print :SUPublicEDKey' \
         "$built_application/Contents/Info.plist"
 )"
-keychain_public_key="$("$generate_keys" --account "$sparkle_account" -p)"
-if [[ "$embedded_public_key" != "$keychain_public_key" ]]; then
-    printf 'The app public key does not match the Sparkle key in Keychain.\n' >&2
+if [[ -n "$sparkle_key_file" ]]; then
+    # CI has no login Keychain entry, so derive the Ed25519 public key from
+    # the exported private seed (PKCS#8 prefix + 32-byte seed).
+    sparkle_signing_arguments=(--ed-key-file "$sparkle_key_file")
+    expected_public_key="$(
+        {
+            printf '302e020100300506032b657004220420' | xxd -r -p
+            base64 -d < "$sparkle_key_file"
+        } |
+            openssl pkey -inform DER -pubout -outform DER |
+            tail -c 32 |
+            base64
+    )"
+else
+    sparkle_signing_arguments=(--account "$sparkle_account")
+    expected_public_key="$("$generate_keys" --account "$sparkle_account" -p)"
+fi
+if [[ "$embedded_public_key" != "$expected_public_key" ]]; then
+    printf 'The app public key does not match the Sparkle signing key.\n' >&2
     exit 1
 fi
 
@@ -222,8 +293,8 @@ updates_directory="$temporary_directory/updates"
 licenses_directory="$disk_image_source/Licenses"
 mkdir -p "$licenses_directory" "$updates_directory"
 
-/usr/bin/ditto "$built_application" "$disk_image_source/AI Usage.app"
-/usr/bin/ditto "$repository_directory/LICENSE" "$licenses_directory/AI Usage.txt"
+/usr/bin/ditto "$built_application" "$disk_image_source/$application_name.app"
+/usr/bin/ditto "$repository_directory/LICENSE" "$licenses_directory/$application_name.txt"
 /usr/bin/ditto \
     "$repository_directory/NOTICE" \
     "$licenses_directory/Third-Party Notices.txt"
@@ -233,23 +304,31 @@ mkdir -p "$licenses_directory" "$updates_directory"
 printf 'Creating DMG…\n'
 /usr/bin/hdiutil create \
     -quiet \
-    -volname "AI Usage" \
+    -volname "$application_name" \
     -srcfolder "$disk_image_source" \
     -format UDZO \
     -ov \
     "$disk_image"
 /usr/bin/hdiutil verify -quiet "$disk_image"
 
-if [[ -n "$codesign_identity" ]]; then
+if [[ "$signing_mode" == "developer-id" ]]; then
     /usr/bin/codesign \
         --force \
         --sign "$codesign_identity" \
+        ${keychain_arguments[@]+"${keychain_arguments[@]}"} \
         --timestamp \
+        "$disk_image"
+elif [[ "$signing_mode" == "self-signed" ]]; then
+    /usr/bin/codesign \
+        --force \
+        --sign "$codesign_identity" \
+        ${keychain_arguments[@]+"${keychain_arguments[@]}"} \
+        --timestamp=none \
         "$disk_image"
 fi
 
 if [[ -n "${NOTARYTOOL_PROFILE:-}" ]]; then
-    if [[ -z "$codesign_identity" ]]; then
+    if [[ "$signing_mode" != "developer-id" ]]; then
         printf 'NOTARYTOOL_PROFILE requires a Developer ID signed build.\n' >&2
         exit 1
     fi
@@ -289,10 +368,10 @@ if [[ -n "${NOTARYTOOL_PROFILE:-}" ]]; then
 fi
 
 /usr/bin/shasum -a 256 "$disk_image" |
-    awk '{ print $1 "  AI-Usage.dmg" }' > "$checksum"
+    awk -v name="$disk_image_name.dmg" '{ print $1 "  " name }' > "$checksum"
 
-/usr/bin/ditto "$disk_image" "$updates_directory/AI-Usage.dmg"
-/usr/bin/ditto "$release_notes" "$updates_directory/AI-Usage.md"
+/usr/bin/ditto "$disk_image" "$updates_directory/$disk_image_name.dmg"
+/usr/bin/ditto "$release_notes" "$updates_directory/$disk_image_name.md"
 if [[ -f "$repository_directory/appcast.xml" ]]; then
     /usr/bin/ditto \
         "$repository_directory/appcast.xml" \
@@ -301,18 +380,18 @@ fi
 
 printf 'Generating signed Sparkle appcast…\n'
 "$generate_appcast" \
-    --account "$sparkle_account" \
+    "${sparkle_signing_arguments[@]}" \
     --download-url-prefix \
-    "https://github.com/burakgon/ai-usage-menubar/releases/download/v$version/" \
+    "$repository_url/releases/download/v$version/" \
     --embed-release-notes \
-    --link "https://github.com/burakgon/ai-usage-menubar" \
+    --link "$repository_url" \
     --maximum-versions 5 \
     --maximum-deltas 0 \
     "$updates_directory"
 
 /usr/bin/xmllint --noout "$updates_directory/appcast.xml"
 "$sign_update" \
-    --account "$sparkle_account" \
+    "${sparkle_signing_arguments[@]}" \
     --verify \
     "$updates_directory/appcast.xml"
 /usr/bin/ditto \
@@ -324,8 +403,9 @@ printf '  App: %s\n' "$built_application"
 printf '  DMG: %s\n' "$disk_image"
 printf '  SHA-256: %s\n' "$checksum"
 printf '  Appcast: %s\n' "$repository_directory/appcast.xml"
+printf '  Signing: %s\n' "$signing_mode"
 
-if [[ -z "$codesign_identity" ]]; then
+if [[ "$signing_mode" != "developer-id" ]]; then
     printf '\nNotarization: skipped (no Developer ID Application identity)\n'
 elif [[ -z "${NOTARYTOOL_PROFILE:-}" ]]; then
     printf '\nNotarization: skipped (NOTARYTOOL_PROFILE is not set)\n'

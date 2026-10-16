@@ -1,0 +1,156 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: xcode-27
+    timeout-minutes: 45
+    env:
+      TAP_REPOSITORY: rafalozan0/homebrew-tap
+      CASK_PATH: Casks/ai-usage-plus.rb
+    steps:
+      - name: Check out the tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve the version
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag $GITHUB_REF_NAME is not vX.Y.Z" >&2
+            exit 1
+          fi
+          git fetch origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "Tag $GITHUB_REF_NAME must point at a commit on main" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          xcodebuild -version
+
+      - name: Import the signing certificate
+        env:
+          SIGNING_CERT_P12_BASE64: ${{ secrets.SIGNING_CERT_P12_BASE64 }}
+          SIGNING_CERT_PASSWORD: ${{ secrets.SIGNING_CERT_PASSWORD }}
+        run: |
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          certificate="$RUNNER_TEMP/signing.p12"
+          printf '%s' "$SIGNING_CERT_P12_BASE64" | base64 -d > "$certificate"
+          # An empty keychain password works around actions/runner-images#14837
+          # on the Xcode 27 image; the keychain is deleted after the job.
+          security create-keychain -p "" "$keychain"
+          security set-keychain-settings "$keychain"
+          security unlock-keychain -p "" "$keychain"
+          security import "$certificate" \
+            -k "$keychain" \
+            -P "$SIGNING_CERT_PASSWORD" \
+            -T /usr/bin/codesign
+          security set-key-partition-list \
+            -S apple-tool:,apple: -s -k "" "$keychain" > /dev/null
+          rm -f "$certificate"
+          identity="$(
+            security find-identity -p codesigning "$keychain" |
+              awk '/^ *1\)/ { print $2; exit }'
+          )"
+          if [[ -z "$identity" ]]; then
+            echo "No code signing identity in the imported certificate" >&2
+            exit 1
+          fi
+          echo "AI_USAGE_CODESIGN_IDENTITY=$identity" >> "$GITHUB_ENV"
+          echo "AI_USAGE_CODESIGN_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
+      - name: Write the Sparkle key
+        env:
+          SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+        run: |
+          key_file="$RUNNER_TEMP/sparkle_ed_key"
+          (umask 077 && printf '%s' "$SPARKLE_ED_PRIVATE_KEY" > "$key_file")
+          echo "SPARKLE_ED_KEY_FILE=$key_file" >> "$GITHUB_ENV"
+
+      - name: Run tests
+        run: |
+          xcodebuild test \
+            -quiet \
+            -project AIUsage.xcodeproj \
+            -scheme AIUsage \
+            -destination 'platform=macOS' \
+            -derivedDataPath DerivedData-Test
+
+      - name: Build the DMG and appcast
+        run: ./scripts/package_release.sh "${{ steps.version.outputs.version }}"
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "v$VERSION" \
+            "dist/v$VERSION/AI-Usage-Plus.dmg" \
+            "dist/v$VERSION/AI-Usage-Plus.dmg.sha256" \
+            --verify-tag \
+            --title "AI Usage Plus $VERSION" \
+            --notes-file "docs/releases/$VERSION.md"
+
+      # The DMG is live before the feed points at it, so Sparkle never sees a
+      # missing enclosure.
+      - name: Commit the appcast to main
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          cp appcast.xml "$RUNNER_TEMP/appcast.xml"
+          git checkout -- appcast.xml
+          git checkout main
+          git pull --ff-only origin main
+          cp "$RUNNER_TEMP/appcast.xml" appcast.xml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add appcast.xml
+          git commit -m "Update appcast for AI Usage Plus $VERSION"
+          git push origin main
+
+      - name: Update the Homebrew cask
+        env:
+          TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if [[ -z "$TAP_GITHUB_TOKEN" ]]; then
+            echo "::warning::TAP_GITHUB_TOKEN is not set; update $TAP_REPOSITORY by hand."
+            exit 0
+          fi
+          sha256="$(awk '{ print $1 }' "dist/v$VERSION/AI-Usage-Plus.dmg.sha256")"
+          tap="$RUNNER_TEMP/homebrew-tap"
+          git clone \
+            "https://x-access-token:$TAP_GITHUB_TOKEN@github.com/$TAP_REPOSITORY.git" \
+            "$tap"
+          sed -i '' \
+            -e "s/^  version \".*\"/  version \"$VERSION\"/" \
+            -e "s/^  sha256 \".*\"/  sha256 \"$sha256\"/" \
+            "$tap/$CASK_PATH"
+          cd "$tap"
+          if git diff --quiet; then
+            echo "Cask already at $VERSION"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "ai-usage-plus $VERSION"
+          git push
+
+      - name: Clean up signing material
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2>/dev/null || true
+          rm -f "$RUNNER_TEMP/sparkle_ed_key"
