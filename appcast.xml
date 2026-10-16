@@ -1,6 +1,35 @@
-<?xml version="1.0" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+<?xml version="1.0" standalone="yes"?><!-- sparkle-sign-warning:
+IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
+--><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>AI Usage Plus</title>
+        <item>
+            <title>1.0.0</title>
+            <pubDate>Fri, 16 Oct 2026 05:39:58 +0000</pubDate>
+            <link>https://github.com/rafalozan0/ai-usage-menubar</link>
+            <sparkle:version>13</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[# AI Usage Plus 1.0.0
+
+The first release of AI Usage Plus, an independently maintained open-source
+fork of [AI Usage](https://github.com/burakgon/ai-usage-menubar) by Burak Gon.
+
+- Track the Antigravity Argon quota pool and send the current CLI user agent.
+- Add a DeepSeek provider that shows your API balance as a bar from your
+  starting balance down to zero, with the official DeepSeek logo.
+- Fix provider cards overlapping the footer while scrolling the popover.
+- Fix the Grok icon looking thin and cut off.
+- Add an Edit menu so text fields accept paste.
+- Ship under a new bundle identifier (`com.rafalozan0.aiusageplus`) with its own
+  update feed, so it can be installed next to the original app.
+
+Install with Homebrew: `brew install --cask rafalozan0/tap/ai-usage-plus`.
+]]></description>
+            <enclosure url="https://github.com/rafalozan0/ai-usage-menubar/releases/download/v1.0.0/AI-Usage-Plus.dmg" length="3960021" type="application/octet-stream" sparkle:edSignature="6VyhTX5U2nbvl19sQdhBJ+dP0CmMubxrnxDtKbm4vslYiD8uhwRbf7n6AAwcJ5J/GsetolsKq5JbGlXAuXhZCg=="></enclosure>
+        </item>
     </channel>
-</rss>
+</rss><!-- sparkle-signatures:
+edSignature: MNqhOi5IHNRD3Rl7U7ies65mmIdCCb7Ma1M/aMHepdj9tOpeWEfhBNHCl5MBwkAb02be6r9etb+1un1ewEMsCA==
+length: 1990
+-->
