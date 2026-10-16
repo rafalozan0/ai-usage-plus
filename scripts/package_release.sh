@@ -21,7 +21,7 @@ artifact_directory="$repository_directory/dist/v$version"
 release_notes="$repository_directory/docs/releases/$version.md"
 application_name="AI Usage Plus"
 disk_image_name="AI-Usage-Plus"
-repository_url="https://github.com/rafalozan0/ai-usage-menubar"
+repository_url="https://github.com/rafalozan0/ai-usage-plus"
 built_application="$derived_data_directory/Build/Products/Release/$application_name.app"
 application_binary="$built_application/Contents/MacOS/$application_name"
 sparkle_framework="$built_application/Contents/Frameworks/Sparkle.framework"
@@ -205,7 +205,7 @@ feed_url="$(
         -c 'Print :SUFeedURL' \
         "$built_application/Contents/Info.plist"
 )"
-expected_feed_url="https://raw.githubusercontent.com/rafalozan0/ai-usage-menubar/main/appcast.xml"
+expected_feed_url="https://raw.githubusercontent.com/rafalozan0/ai-usage-plus/main/appcast.xml"
 if [[ "$feed_url" != "$expected_feed_url" ]]; then
     printf 'Unexpected Sparkle feed URL: %s\n' "$feed_url" >&2
     exit 1

@@ -31,7 +31,7 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/rafalozan0/ai-usage-menubar/main/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/rafalozan0/ai-usage-plus/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>b9GjYRAnuvagsWfTGGAqqDlAV3Bu9SzvY0maFy/+a/s=</string>
 	<key>SURequireSignedFeed</key>

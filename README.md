@@ -68,7 +68,7 @@ required. Updates arrive in-app through Sparkle, so you don't need
 ### DMG
 
 <p>
-  <a href="https://github.com/rafalozan0/ai-usage-menubar/releases/latest/download/AI-Usage-Plus.dmg">
+  <a href="https://github.com/rafalozan0/ai-usage-plus/releases/latest/download/AI-Usage-Plus.dmg">
     <img src="https://img.shields.io/badge/Download-DMG-0A84FF?logo=apple&logoColor=white" alt="Download the latest AI Usage Plus DMG">
   </a>
 </p>
@@ -143,8 +143,8 @@ You need:
 Then:
 
 ```bash
-git clone https://github.com/rafalozan0/ai-usage-menubar.git
-cd ai-usage-menubar
+git clone https://github.com/rafalozan0/ai-usage-plus.git
+cd ai-usage-plus
 ./scripts/install.sh
 ```
 
@@ -227,5 +227,5 @@ original AI Usage.
 ---
 
 If AI Usage Plus saves you a few clicks, please
-[star the repository](https://github.com/rafalozan0/ai-usage-menubar). It helps
+[star the repository](https://github.com/rafalozan0/ai-usage-plus). It helps
 other coding-agent users find it.

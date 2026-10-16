@@ -7,7 +7,7 @@ final class UpdateConfigurationTests: XCTestCase {
 
         XCTAssertEqual(
             info?["SUFeedURL"] as? String,
-            "https://raw.githubusercontent.com/rafalozan0/ai-usage-menubar/main/appcast.xml"
+            "https://raw.githubusercontent.com/rafalozan0/ai-usage-plus/main/appcast.xml"
         )
         XCTAssertEqual(
             info?["SUPublicEDKey"] as? String,

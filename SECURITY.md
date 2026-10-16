@@ -10,7 +10,7 @@ Please do not open a public issue for a suspected vulnerability.
 
 Use GitHub's private vulnerability reporting form:
 
-https://github.com/rafalozan0/ai-usage-menubar/security/advisories/new
+https://github.com/rafalozan0/ai-usage-plus/security/advisories/new
 
 Include the affected version, steps to reproduce, potential impact, and any
 suggested mitigation. You should receive an acknowledgement within 72 hours.
