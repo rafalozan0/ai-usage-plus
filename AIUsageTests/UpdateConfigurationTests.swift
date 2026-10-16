@@ -7,11 +7,11 @@ final class UpdateConfigurationTests: XCTestCase {
 
         XCTAssertEqual(
             info?["SUFeedURL"] as? String,
-            "https://raw.githubusercontent.com/burakgon/ai-usage-menubar/main/appcast.xml"
+            "https://raw.githubusercontent.com/rafalozan0/ai-usage-menubar/main/appcast.xml"
         )
         XCTAssertEqual(
             info?["SUPublicEDKey"] as? String,
-            "Axec4KdnVCK/H0z6UrhigcI44LRzdrN8vnBxIvqPurc="
+            "b9GjYRAnuvagsWfTGGAqqDlAV3Bu9SzvY0maFy/+a/s="
         )
         XCTAssertEqual(info?["SUEnableAutomaticChecks"] as? Bool, true)
         XCTAssertEqual(info?["SURequireSignedFeed"] as? Bool, true)

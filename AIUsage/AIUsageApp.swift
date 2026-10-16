@@ -66,7 +66,7 @@ final class AIUsageAppDelegate: NSObject, NSApplicationDelegate {
     private func installMainMenu() {
         let mainMenu = NSMenu()
         let appMenuItem = NSMenuItem()
-        let appMenu = NSMenu(title: "AI Usage")
+        let appMenu = NSMenu(title: "AI Usage Plus")
 
         let settingsItem = NSMenuItem(
             title: "Settings…",
@@ -77,7 +77,7 @@ final class AIUsageAppDelegate: NSObject, NSApplicationDelegate {
         appMenu.addItem(settingsItem)
         appMenu.addItem(.separator())
         let quitItem = NSMenuItem(
-            title: "Quit AI Usage",
+            title: "Quit AI Usage Plus",
             action: #selector(NSApplication.terminate(_:)),
             keyEquivalent: "q"
         )

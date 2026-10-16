@@ -215,7 +215,7 @@ struct SettingsView: View {
 
             Spacer()
 
-            Button("Quit AI Usage") {
+            Button("Quit AI Usage Plus") {
                 NSApplication.shared.terminate(nil)
             }
         }

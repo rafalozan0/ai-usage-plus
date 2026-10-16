@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>AI Usage</string>
+	<string>AI Usage Plus</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,9 +31,9 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/burakgon/ai-usage-menubar/main/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/rafalozan0/ai-usage-menubar/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>Axec4KdnVCK/H0z6UrhigcI44LRzdrN8vnBxIvqPurc=</string>
+	<string>b9GjYRAnuvagsWfTGGAqqDlAV3Bu9SzvY0maFy/+a/s=</string>
 	<key>SURequireSignedFeed</key>
 	<true/>
 	<key>SUScheduledCheckInterval</key>

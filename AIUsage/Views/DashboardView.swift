@@ -69,7 +69,7 @@ struct DashboardView: View {
                 .tint(UsagePalette.accent)
                 .controlSize(.small)
                 .disabled(isCheckingForUpdates)
-                .help("Update AI Usage to \(version)")
+                .help("Update AI Usage Plus to \(version)")
             }
 
             HStack(spacing: 0) {
@@ -190,7 +190,7 @@ struct DashboardContentView: View {
 
     private var header: some View {
         HStack {
-            Text("AI Usage")
+            Text("AI Usage Plus")
                 .font(.headline.weight(.semibold))
             Spacer()
             Picker("Numbers", selection: $usageDisplayMode) {
