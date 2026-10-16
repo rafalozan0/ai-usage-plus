@@ -38,7 +38,7 @@ actor AntigravityProvider: UsageProvider {
         var summary = await client.cloudCode(
             path: AntigravityUsageClient.summaryPath,
             accessToken: token,
-            userAgent: "antigravity"
+            userAgent: AntigravityUsageClient.userAgent
         )
         if case .authentication = summary,
            let refresh = auth.refreshToken,
@@ -47,7 +47,7 @@ actor AntigravityProvider: UsageProvider {
             summary = await client.cloudCode(
                 path: AntigravityUsageClient.summaryPath,
                 accessToken: token,
-                userAgent: "antigravity"
+                userAgent: AntigravityUsageClient.userAgent
             )
         }
         if case .authentication = summary {
@@ -61,7 +61,7 @@ actor AntigravityProvider: UsageProvider {
         switch await client.cloudCode(
             path: AntigravityUsageClient.planPath,
             accessToken: token,
-            userAgent: "agy"
+            userAgent: AntigravityUsageClient.userAgent
         ) {
         case let .success(data): planData = data
         case .authentication, .unavailable: planData = nil
@@ -79,7 +79,7 @@ actor AntigravityProvider: UsageProvider {
         switch await client.cloudCode(
             path: AntigravityUsageClient.modelsPath,
             accessToken: token,
-            userAgent: "antigravity"
+            userAgent: AntigravityUsageClient.userAgent
         ) {
         case let .success(data):
             if let snapshot = AntigravityUsageMapper.legacy(

@@ -25,6 +25,7 @@ struct AntigravityUsageClient: Sendable {
         "/v1internal:retrieveUserQuotaSummary"
     static let modelsPath = "/v1internal:fetchAvailableModels"
     static let planPath = "/v1internal:loadCodeAssist"
+    static let userAgent = "antigravity/cli/1.3.6"
     static let googleOAuthURL = URL(
         string: "https://oauth2.googleapis.com/token"
     )!
