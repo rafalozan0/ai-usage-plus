@@ -118,6 +118,7 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
     case completions
     case claudePool
     case claudePoolWeekly
+    case argonWeekly
 
     var title: String {
         switch self {
@@ -136,6 +137,7 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
         case .completions: "Completions"
         case .claudePool: "Claude"
         case .claudePoolWeekly: "Claude Weekly"
+        case .argonWeekly: "Argon Weekly"
         }
     }
 
@@ -156,6 +158,7 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
         case .completions: .completions
         case .claudePool: .claudePool
         case .claudePoolWeekly: .claudePoolWeekly
+        case .argonWeekly: .argonWeekly
         }
     }
 }
@@ -175,6 +178,7 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
     case completions
     case claudePool
     case claudePoolWeekly
+    case argonWeekly
     case extraUsage
     case credits
 
@@ -196,6 +200,7 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .completions: "Completions"
         case .claudePool: "Claude"
         case .claudePoolWeekly: "Claude Weekly"
+        case .argonWeekly: "Argon Weekly"
         case .extraUsage: "Extra Usage"
         case .credits: "Credits"
         }
@@ -217,6 +222,7 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .completions: "text.badge.checkmark"
         case .claudePool: "brain"
         case .claudePoolWeekly: "calendar.badge.clock"
+        case .argonWeekly: "atom"
         case .extraUsage: "dollarsign.circle"
         case .credits: "creditcard"
         }
@@ -238,6 +244,7 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .completions: "Co"
         case .claudePool: "Cl"
         case .claudePoolWeekly: "ClW"
+        case .argonWeekly: "ArW"
         case .extraUsage: "E"
         case .credits: "C"
         }
@@ -259,6 +266,7 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .completions: .completions
         case .claudePool: .claudePool
         case .claudePoolWeekly: .claudePoolWeekly
+        case .argonWeekly: .argonWeekly
         case .credits: .credits
         case .extraUsage: nil
         }

@@ -413,7 +413,8 @@ final class MapperTests: XCTestCase {
                   {"bucketId":"gemini-5h","remainingFraction":0.9},
                   {"bucketId":"gemini-weekly","remainingFraction":0.6},
                   {"bucketId":"3p-5h","remainingFraction":0.25},
-                  {"bucketId":"3p-weekly","remainingFraction":0.1}
+                  {"bucketId":"3p-weekly","remainingFraction":0.1},
+                  {"bucketId":"gemini-argon-wtu-weekly","remainingFraction":0.8}
                 ]}
               ]
             }
@@ -425,11 +426,45 @@ final class MapperTests: XCTestCase {
         XCTAssertEqual(snapshot.provider, .antigravity)
         XCTAssertEqual(
             snapshot.windows.map(\.kind),
-            [.session, .weekly, .claudePool, .claudePoolWeekly]
+            [.session, .weekly, .argonWeekly, .claudePool, .claudePoolWeekly]
         )
         XCTAssertEqual(
             snapshot.windows.map(\.usedPercent),
-            [10, 40, 75, 90]
+            [10, 40, 20, 75, 90]
+        )
+    }
+
+    func testAntigravityLegacyFallbackSeparatesArgonFromGeminiAndClaude() throws {
+        let snapshot = try XCTUnwrap(AntigravityUsageMapper.legacy(
+            Data("""
+            {
+              "models": {
+                "gemini-3-1-pro-high": {
+                  "displayName": "Gemini 3.1 Pro (High)",
+                  "quotaInfo": {"remainingFraction": 0.9}
+                },
+                "gemini-4-argon-high": {
+                  "displayName": "Gemini 4 Argon (High Thinking)",
+                  "quotaInfo": {"remainingFraction": 0.75}
+                },
+                "claude-opus-4-6-thinking": {
+                  "displayName": "Claude Opus 4.6 (Thinking)",
+                  "quotaInfo": {"remainingFraction": 0.5}
+                }
+              }
+            }
+            """.utf8),
+            planName: "Pro",
+            now: Date()
+        ))
+
+        XCTAssertEqual(
+            snapshot.windows.map(\.kind),
+            [.session, .argonWeekly, .claudePool]
+        )
+        XCTAssertEqual(
+            snapshot.windows.map(\.usedPercent),
+            [10, 25, 50]
         )
     }
 

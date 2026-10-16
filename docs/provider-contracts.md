@@ -121,7 +121,7 @@ causes at most one refresh and one retry.
 | Provider | Local credential source | First-party usage contract | Mapped metrics |
 | --- | --- | --- | --- |
 | Cursor | Cursor state SQLite database, then `cursor-access-token` and `cursor-refresh-token` Keychain items | `api2.cursor.sh` DashboardService Connect RPCs | Total, Auto, API |
-| Antigravity | Keychain service `gemini`, account `antigravity` | Google Cloud Code quota-summary API, with model-quota fallback | Gemini session/weekly, Claude session/weekly |
+| Antigravity | Keychain service `gemini`, account `antigravity` | Google Cloud Code quota-summary API, with model-quota fallback (`antigravity/cli/1.3.6` User-Agent) | Gemini session/weekly, Argon weekly, Claude session/weekly |
 | GitHub Copilot | Copilot editor config, GitHub CLI config, then `gh:github.com` Keychain item | `api.github.com/copilot_internal/user` | Credits, Chat, Completions |
 | Devin | `~/.local/share/devin/credentials.toml`, then Devin state SQLite database | Codeium SeatManagement Connect RPC | Daily, Weekly |
 | Grok | `~/.grok/auth.json` | Grok CLI billing and settings APIs | Weekly |

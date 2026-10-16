@@ -6,6 +6,8 @@ enum AntigravityUsageMapper {
     ] = [
         "gemini-5h": .session,
         "gemini-weekly": .weekly,
+        "gemini-argon-wtu-weekly": .argonWeekly,
+        "gemini-argon-weekly": .argonWeekly,
         "3p-5h": .claudePool,
         "3p-weekly": .claudePoolWeekly
     ]
@@ -71,9 +73,16 @@ enum AntigravityUsageMapper {
             else {
                 continue
             }
-            let kind: QuotaKind = label.lowercased().contains("gemini")
-                ? .session
-                : .claudePool
+            let lowerLabel = label.lowercased()
+            let lowerID = identifier.lowercased()
+            let kind: QuotaKind
+            if lowerLabel.contains("argon") || lowerID.contains("argon") {
+                kind = .argonWeekly
+            } else if lowerLabel.contains("gemini") {
+                kind = .session
+            } else {
+                kind = .claudePool
+            }
             let remaining = ProviderParsing.double(
                 quota["remainingFraction"]
             ) ?? 0
@@ -84,7 +93,6 @@ enum AntigravityUsageMapper {
             if candidate.0 < (worstRemaining[kind]?.0 ?? 2) {
                 worstRemaining[kind] = candidate
             }
-            _ = identifier
         }
         let windows = worstRemaining.map { kind, value in
             QuotaWindow(
@@ -124,7 +132,11 @@ enum AntigravityUsageMapper {
         _ windows: [QuotaWindow]
     ) -> [QuotaWindow] {
         let order: [QuotaKind] = [
-            .session, .weekly, .claudePool, .claudePoolWeekly
+            .session,
+            .weekly,
+            .argonWeekly,
+            .claudePool,
+            .claudePoolWeekly
         ]
         return windows.sorted {
             (order.firstIndex(of: $0.kind) ?? 99)
