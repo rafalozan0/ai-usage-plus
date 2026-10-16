@@ -2,56 +2,45 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/app-icon-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="docs/images/app-icon-light.png">
-    <img src="docs/images/app-icon-dark.png" width="96" alt="AI Usage adaptive app icon with three compact usage bars">
+    <img src="docs/images/app-icon-dark.png" width="112" alt="AI Usage Plus app icon: three usage bars next to an orange plus">
   </picture>
 </p>
 
 <h1 align="center">AI Usage Plus</h1>
 
 <p align="center">
-  <strong>Your coding agents' limits, one click away.</strong><br>
+  <strong>Every coding agent's limits, one click away in your menu bar.</strong><br>
   Native Liquid Glass. Measured at 0.0% CPU between scheduled refreshes.
 </p>
 
 <p align="center">
+  <a href="https://github.com/rafalozan0/ai-usage-plus/releases/latest"><img src="https://img.shields.io/github/v/release/rafalozan0/ai-usage-plus?label=release&color=FF9500" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/macOS-26%2B-000000?logo=apple&logoColor=white" alt="macOS 26 or newer">
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
 </p>
 
-<p align="center">
-  <img src="docs/images/ai-usage-menubar-dark.png" width="900" alt="AI Usage open beneath its 85% macOS menu bar item in dark mode, showing remaining Claude Code and Codex limits">
-</p>
+<table align="center">
+  <tr>
+    <td><img src="docs/images/ai-usage-plus-dark.png" width="400" alt="AI Usage Plus in dark mode beneath its menu bar item, showing Claude Code, Codex, and Cursor limits, with Cursor on an X Plus plan"></td>
+    <td><img src="docs/images/ai-usage-plus-light.png" width="400" alt="The same AI Usage Plus panel in light mode"></td>
+  </tr>
+</table>
 
 <p align="center">
-  <sub>A real native menu bar popover — no Dock icon or persistent window.</sub>
+  <sub>A real native menu bar popover in light and dark mode. No Dock icon, no persistent window.</sub>
 </p>
+
+AI Usage Plus shows how much is left on Claude Code, Codex, Cursor,
+Antigravity, GitHub Copilot, Devin, Grok, and DeepSeek, then gets out of the
+way. No extra account, local server, telemetry, usage history, or background
+log scanning.
 
 > [!NOTE]
 > AI Usage Plus is an independently maintained, open-source fork of
 > [AI Usage](https://github.com/burakgon/ai-usage-menubar) by Burak Gon. It
 > keeps the same goals and the same MIT license, and ships new providers and
-> fixes on its own schedule. See [Differences from AI Usage](#differences-from-ai-usage).
-
-AI Usage Plus shows Claude Code, Codex, Cursor, Antigravity, GitHub Copilot,
-Devin, Grok, and DeepSeek limits and stays out of the way. No extra account, API key, local
-server, telemetry, usage history, or background log scanning.
-
-## Choose exactly what appears.
-
-<p align="center">
-  <img src="docs/images/ai-usage-settings-dark.png" width="760" alt="AI Usage native settings popover in dark mode, showing tracking, menu bar visibility, and metric choices for all seven supported coding agents">
-</p>
-
-<p align="center">
-  <sub>Track every tool you use. Only selected providers and metrics reach the menu bar.</sub>
-</p>
-
-## Other usage apps stay heavy. AI Usage Plus stays light.
-
-<p align="center">
-  <img src="docs/images/efficiency-comparison.svg" width="900" alt="Other always-on usage apps keep CPU, interface memory, and battery activity running. AI Usage releases its interface and only wakes briefly for scheduled refreshes.">
-</p>
+> fixes on its own schedule. See [What's different](#whats-different).
 
 ## Install
 
@@ -69,7 +58,7 @@ required. Updates arrive in-app through Sparkle, so you don't need
 
 <p>
   <a href="https://github.com/rafalozan0/ai-usage-plus/releases/latest/download/AI-Usage-Plus.dmg">
-    <img src="https://img.shields.io/badge/Download-DMG-0A84FF?logo=apple&logoColor=white" alt="Download the latest AI Usage Plus DMG">
+    <img src="https://img.shields.io/badge/Download-DMG-FF9500?logo=apple&logoColor=white" alt="Download the latest AI Usage Plus DMG">
   </a>
 </p>
 
@@ -98,67 +87,71 @@ xattr -dr com.apple.quarantine "/Applications/AI Usage Plus.app"
 > keeps working across updates. Updates are protected by Sparkle's EdDSA
 > signature.
 
-## Differences from AI Usage
+## Supported providers
 
-AI Usage Plus 1.0.0 is based on AI Usage 0.2.1 and adds:
+| Provider | Signs in with | What you see |
+|---|---|---|
+| Claude Code | Claude Code login | Session, weekly, Sonnet, and Fable limits; extra usage |
+| Codex | Codex login | Session, weekly, Spark, and Spark weekly limits; credits |
+| Cursor | Cursor app login | Total, Auto, and API usage; X Subscription pool |
+| Antigravity | Antigravity login | Session and weekly limits; Claude and Argon pools |
+| GitHub Copilot | Copilot or GitHub CLI login | Credits, chat, and completions |
+| Devin | Devin CLI login | Daily and weekly quota |
+| Grok | `grok login` | Weekly quota, or the shared X Subscription pool |
+| DeepSeek | API key pasted in Settings | API balance |
 
-- Antigravity Argon quota pool tracking and the current CLI user agent
-- A DeepSeek provider that shows your API balance as a bar from your starting
-  balance down to zero
-- A fix for provider cards overlapping the footer while scrolling
-- A fix for the Grok icon looking thin and cut off
-- An Edit menu so text fields accept paste
+Cards appear only for tools installed on your Mac. Signed-out tools stay visible
+with a short explanation.
 
-It uses its own bundle identifier (`com.rafalozan0.aiusageplus`), so it can be
-installed next to the original. Useful fixes are still offered upstream as
-pull requests.
+### The X Subscription (Grok + Cursor)
+
+Since October 2026, xAI sells Grok and Cursor together as The X Subscription,
+with one weekly usage pool shared by Grok, Grok Build, and Cursor's Grok and
+Composer models. AI Usage Plus detects merged accounts:
+
+- The Cursor card shows your tier as **X Plus**, **X Premium**, and so on, and
+  notes that the pool is shared with Grok.
+- xAI's own Grok billing endpoint fails for merged accounts, so the Grok card
+  shows the same shared pool, read through your Cursor login.
+
+Third-party models in Cursor, such as Claude or GPT, are billed outside the
+pool and show up as Cursor's **API Usage**.
 
 ## What you get
 
-- Claude Code session, weekly, Sonnet, and Fable limits
-- Codex session, weekly, Spark, and Spark weekly limits
-- Cursor total, Auto, and API usage
-- Antigravity Gemini, Claude, and Argon pool limits
-- GitHub Copilot credits, chat, and completions
-- Devin daily and weekly quota
-- Grok weekly quota
-- DeepSeek API balance
-- Claude Code extra usage and Codex credits when available
 - Remaining or used percentages, switchable directly in the panel
 - Independent menu bar controls and metric choices for each provider
 - Configurable 1, 5, 15, 30, or 60-minute refresh and one-click manual refresh
 - Signed update checks at launch and daily, plus **Check for Updates…**
 - A direct **Update** button in the panel when a new version is available
-- Provider cards only for installed tools, with signed-out status kept visible
 - Native light and dark appearances with Liquid Glass
 - Launch at Login enabled by default and still user-controllable
 
-## Build from source
+## Other usage apps stay heavy. AI Usage Plus stays light.
 
-You need:
+<p align="center">
+  <img src="docs/images/efficiency-comparison.svg" width="900" alt="Other always-on usage apps keep CPU, interface memory, and battery activity running. AI Usage Plus releases its interface and only wakes briefly for scheduled refreshes.">
+</p>
 
-- macOS 26 or newer
-- Xcode 27 or newer
+## What's different
 
-Then:
+AI Usage Plus started from AI Usage 0.2.1 and adds:
 
-```bash
-git clone https://github.com/rafalozan0/ai-usage-plus.git
-cd ai-usage-plus
-./scripts/install.sh
-```
+- **The X Subscription:** shared Grok + Cursor pool, labeled on both cards
+- **DeepSeek:** API balance shown as a bar from your starting balance to zero
+- **Antigravity Argon:** the Argon weekly pool and the current CLI user agent
+- **Fixes:** provider cards no longer overlap the footer while scrolling, the
+  Grok icon is no longer thin and cut off, and text fields accept paste
+- **Its own identity:** new icon, bundle identifier
+  `com.rafalozan0.aiusageplus`, update feed, and Homebrew tap, so it installs
+  next to the original
 
-The script builds a local Release version, installs it to
-`~/Applications/AI Usage Plus.app`, and opens it. AI Usage Plus appears in the
-menu bar, not the Dock.
-
-To run without the installer, open `AIUsage.xcodeproj` in Xcode and run the
-`AIUsage` scheme.
+Useful fixes are still offered upstream as pull requests.
 
 ## How it works
 
-AI Usage Plus reuses credentials already created by supported tools, then requests
-quota data directly from each provider's first-party endpoint.
+AI Usage Plus reuses credentials already created by supported tools, then
+requests quota data directly from each provider's first-party endpoint.
 
 - Credentials stay on your Mac.
 - Tokens are never printed, logged, or sent anywhere else.
@@ -184,6 +177,20 @@ Raw percentages are shown exactly as reported by the provider. Only progress
 bar drawing is clamped to `0...100`. Remaining usage is bounded to `0...100`
 because a negative remaining percentage is not meaningful.
 
+## Build from source
+
+You need macOS 26 or newer and Xcode 27 or newer. Then:
+
+```bash
+git clone https://github.com/rafalozan0/ai-usage-plus.git
+cd ai-usage-plus
+./scripts/install.sh
+```
+
+The script builds a local Release version, installs it to
+`~/Applications/AI Usage Plus.app`, and opens it. To run without the installer,
+open `AIUsage.xcodeproj` in Xcode and run the `AIUsage` scheme.
+
 ## Development
 
 Run the complete test suite:
@@ -201,28 +208,27 @@ store. Its only runtime package dependency is
 over-the-air updates.
 
 Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md)
-before opening a pull request.
+before opening a pull request. Releases are built by GitHub Actions from a
+`v*` tag, as described in [docs/releasing.md](docs/releasing.md). The app icon
+previews can be regenerated with `./scripts/generate_app_icon.swift`.
 
-Adaptive icon previews can be regenerated with
-`./scripts/generate_app_icon.swift`.
-
-Release packaging and OTA feed maintenance are documented in
-[docs/releasing.md](docs/releasing.md).
-
-## Upstream research
+## Credits
 
 AI Usage Plus is a fork of
-[burakgon/ai-usage-menubar](https://github.com/burakgon/ai-usage-menubar).
-Provider contracts and parts of the system-boundary implementation were
-adapted from [OpenUsage](https://github.com/robinebers/openusage), using stable
-tag `v0.7.6` and provider updates through commit
-`9d2bf09f10e21f769494a525a9d65c84d7aeb1df`.
-See [NOTICE](NOTICE) for attribution.
+[burakgon/ai-usage-menubar](https://github.com/burakgon/ai-usage-menubar) by
+Burak Gon. Provider contracts and parts of the system-boundary implementation
+were adapted from [OpenUsage](https://github.com/robinebers/openusage), using
+stable tag `v0.7.6` and provider updates through commit
+`9d2bf09f10e21f769494a525a9d65c84d7aeb1df`. See [NOTICE](NOTICE) for
+attribution.
+
+Provider names and logos identify their respective services and do not imply
+endorsement.
 
 ## License
 
-AI Usage Plus is available under the [MIT License](LICENSE), like the
-original AI Usage.
+AI Usage Plus is available under the [MIT License](LICENSE), like the original
+AI Usage.
 
 ---
 

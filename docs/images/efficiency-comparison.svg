@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="270" viewBox="0 0 1000 270" role="img" aria-labelledby="title description">
   <title id="title">Background resource comparison</title>
-  <description id="description">Matching bars compare CPU activity, interface memory, and battery drain. Other always-on usage apps remain active. AI Usage releases its panel and only wakes briefly for scheduled refreshes.</description>
+  <description id="description">Matching bars compare CPU activity, interface memory, and battery drain. Other always-on usage apps remain active. AI Usage Plus releases its panel and only wakes briefly for scheduled refreshes.</description>
 
   <rect width="1000" height="270" rx="16" fill="#0D1117"/>
   <line x1="500" y1="24" x2="500" y2="224" stroke="#30363D"/>
@@ -9,7 +9,7 @@
     <text x="40" y="43" fill="#F0F3F6" font-size="20" font-weight="700">Other usage apps</text>
     <text x="460" y="43" fill="#FF6B5E" font-size="15" font-weight="700" text-anchor="end">Always active</text>
 
-    <text x="540" y="43" fill="#F0F3F6" font-size="20" font-weight="700">AI Usage</text>
+    <text x="540" y="43" fill="#F0F3F6" font-size="20" font-weight="700">AI Usage Plus</text>
     <text x="960" y="43" fill="#30D158" font-size="15" font-weight="700" text-anchor="end">Lightweight</text>
 
     <g font-size="13" font-weight="650">

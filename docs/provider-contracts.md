@@ -151,6 +151,22 @@ key exists.
 balance, preferring the `USD` entry and otherwise the first currency. DeepSeek
 exposes no token or usage-history endpoint, so consumption is not tracked.
 
+## The X Subscription (fork only)
+
+Since October 12, 2026, xAI sells Grok and Cursor together as The X
+Subscription, with one weekly pool shared by Grok and Cursor's first-party
+models.
+
+- Cursor `GetPlanInfo` reports merged accounts with top-level
+  `"isMerged": true`, the tier in `planInfo.planName` (for example `Plus`), and
+  `planInfo.includedUsagePeriod: INCLUDED_USAGE_PERIOD_WEEKLY`. The card shows
+  the plan as `X <tier>`.
+- Grok `GET /v1/billing?format=credits` returns HTTP 500
+  (`{"error":"Failed to serialize billing response"}`) for merged accounts,
+  while `/v1/settings` may still report the old `subscription_tier_display`.
+  When the Grok quota can't be read, the Grok card shows Cursor's
+  `totalPercentUsed` and `billingCycleEnd` as its weekly window instead.
+
 ## Persistence and failure policy
 
 Rotated credentials are persisted only to the source from which they were

@@ -90,7 +90,7 @@ database, or background transcript scanning.
 - Product positioning, installation, behavior, and privacy claims:
   `README.md`
 - Current menu-bar product screenshot:
-  `docs/images/ai-usage-menubar-dark.png`
+  `docs/images/ai-usage-plus-dark.png` and `docs/images/ai-usage-plus-light.png`
 - App and provider identity assets:
   `AIUsage/Assets.xcassets/`
 - Researched provider behavior and limitations:
