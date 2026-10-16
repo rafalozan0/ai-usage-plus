@@ -1,6 +1,19 @@
 import Foundation
 
 enum CursorUsageMapper {
+    static let xSubscriptionNote = "X Subscription pool, shared with Grok"
+
+    struct PlanInfo: Equatable {
+        let name: String
+        /// True when the Cursor account is part of The X Subscription, whose
+        /// weekly pool is shared with Grok.
+        let isXSubscription: Bool
+
+        var displayName: String {
+            isXSubscription ? "X \(name)" : name
+        }
+    }
+
     static func map(
         usageResponse: HTTPResponse,
         planResponse: HTTPResponse?,
@@ -61,10 +74,12 @@ enum CursorUsageMapper {
             )
         }
 
+        let plan = planInfo(planResponse)
         return ProviderSnapshot(
             provider: .cursor,
-            planName: planName(planResponse),
+            planName: plan?.displayName,
             windows: windows,
+            note: plan?.isXSubscription == true ? xSubscriptionNote : nil,
             fetchedAt: now
         )
     }
@@ -88,17 +103,21 @@ enum CursorUsageMapper {
         return spent / limit * 100
     }
 
-    private static func planName(_ response: HTTPResponse?) -> String? {
+    static func planInfo(_ response: HTTPResponse?) -> PlanInfo? {
         guard let response,
               (200..<300).contains(response.statusCode),
               let body = try? ProviderParsing.object(
                 from: response.body
               ),
-              let info = ProviderParsing.object(body["planInfo"])
+              let info = ProviderParsing.object(body["planInfo"]),
+              let name = ProviderParsing.string(info["planName"])
         else {
             return nil
         }
-        return ProviderParsing.string(info["planName"])
+        return PlanInfo(
+            name: name,
+            isXSubscription: body["isMerged"] as? Bool == true
+        )
     }
 
     private static func clamp(_ value: Double) -> Double {

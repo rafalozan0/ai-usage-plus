@@ -386,6 +386,8 @@ struct ProviderSnapshot: Equatable, Sendable {
     let planName: String?
     let windows: [QuotaWindow]
     let billingUsage: BillingUsage?
+    /// A short explanation shown under the quotas, such as a shared pool.
+    let note: String?
     let fetchedAt: Date
 
     init(
@@ -393,12 +395,14 @@ struct ProviderSnapshot: Equatable, Sendable {
         planName: String?,
         windows: [QuotaWindow],
         billingUsage: BillingUsage? = nil,
+        note: String? = nil,
         fetchedAt: Date
     ) {
         self.provider = provider
         self.planName = planName
         self.windows = windows
         self.billingUsage = billingUsage
+        self.note = note
         self.fetchedAt = fetchedAt
     }
 
@@ -613,6 +617,20 @@ enum RefreshIntervalOption: String, CaseIterable, Identifiable, Sendable {
 protocol UsageProvider: Sendable {
     var id: ProviderID { get }
     func fetch() async throws -> ProviderSnapshot
+}
+
+/// The weekly allowance of The X Subscription, which Grok and Cursor share.
+struct XSubscriptionPool: Equatable, Sendable {
+    let tierName: String
+    let usedPercent: Double
+    let resetsAt: Date?
+
+    /// Shown as the plan badge, for example "X Plus".
+    var planName: String { "X \(tierName)" }
+}
+
+protocol XSubscriptionPoolReading: Sendable {
+    func fetchXSubscriptionPool() async -> XSubscriptionPool?
 }
 
 protocol DateProviding: Sendable {

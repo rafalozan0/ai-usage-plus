@@ -10,7 +10,7 @@ private struct CursorRefreshResponse: Decodable {
     }
 }
 
-actor CursorProvider: UsageProvider {
+actor CursorProvider: UsageProvider, XSubscriptionPoolReading {
     nonisolated let id = ProviderID.cursor
 
     private let authStore: CursorAuthStore
@@ -28,6 +28,32 @@ actor CursorProvider: UsageProvider {
     }
 
     func fetch() async throws -> ProviderSnapshot {
+        try await fetchDetails().snapshot
+    }
+
+    /// The shared weekly pool, when this Cursor account belongs to The X
+    /// Subscription. Grok reads it because xAI's own billing endpoint does
+    /// not report merged accounts.
+    func fetchXSubscriptionPool() async -> XSubscriptionPool? {
+        guard let details = try? await fetchDetails(),
+              let plan = details.plan,
+              plan.isXSubscription,
+              let total = details.snapshot.windows.first(where: {
+                  $0.kind == .totalUsage
+              }) else {
+            return nil
+        }
+        return XSubscriptionPool(
+            tierName: plan.name,
+            usedPercent: total.usedPercent,
+            resetsAt: total.resetsAt
+        )
+    }
+
+    private func fetchDetails() async throws -> (
+        snapshot: ProviderSnapshot,
+        plan: CursorUsageMapper.PlanInfo?
+    ) {
         guard var auth = authStore.load() else {
             throw ProviderFailure(
                 .authentication,
@@ -73,11 +99,12 @@ actor CursorProvider: UsageProvider {
             )
         }
         let plan = try? await client.fetchPlan(accessToken: token)
-        return try CursorUsageMapper.map(
+        let snapshot = try CursorUsageMapper.map(
             usageResponse: usage,
             planResponse: plan,
             now: dateProvider.now()
         )
+        return (snapshot, CursorUsageMapper.planInfo(plan))
     }
 
     private func requestUsage(_ token: String) async throws -> HTTPResponse {

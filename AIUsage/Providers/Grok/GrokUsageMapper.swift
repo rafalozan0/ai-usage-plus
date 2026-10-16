@@ -2,6 +2,24 @@ import Foundation
 
 enum GrokUsageMapper {
     static let weeklyPeriodType = "USAGE_PERIOD_TYPE_WEEKLY"
+    static let xSubscriptionNote = "X Subscription pool, shared with Cursor"
+
+    static func snapshot(
+        from pool: XSubscriptionPool,
+        now: Date
+    ) -> ProviderSnapshot {
+        ProviderSnapshot(
+            provider: .grok,
+            planName: pool.planName,
+            windows: [QuotaWindow(
+                kind: .weekly,
+                usedPercent: clampPercent(pool.usedPercent),
+                resetsAt: pool.resetsAt
+            )],
+            note: xSubscriptionNote,
+            fetchedAt: now
+        )
+    }
 
     static func map(
         response: HTTPResponse,
@@ -11,7 +29,10 @@ enum GrokUsageMapper {
         guard (200..<300).contains(response.statusCode) else {
             throw ProviderFailure(
                 response.statusCode >= 500 ? .transient : .invalidResponse,
-                "Grok usage request failed (\(response.statusCode))."
+                response.statusCode >= 500
+                    ? "xAI isn't reporting Grok usage right now " +
+                        "(\(response.statusCode))."
+                    : "Grok usage request failed (\(response.statusCode))."
             )
         }
         let body = try ProviderParsing.object(from: response.body)

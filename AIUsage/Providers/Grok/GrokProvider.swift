@@ -5,15 +5,18 @@ actor GrokProvider: UsageProvider {
 
     private let authStore: GrokAuthStore
     private let client: GrokUsageClient
+    private let xSubscriptionPool: (any XSubscriptionPoolReading)?
     private let dateProvider: DateProviding
 
     init(
         authStore: GrokAuthStore = GrokAuthStore(),
         client: GrokUsageClient = GrokUsageClient(),
+        xSubscriptionPool: (any XSubscriptionPoolReading)? = CursorProvider(),
         dateProvider: DateProviding = SystemDateProvider()
     ) {
         self.authStore = authStore
         self.client = client
+        self.xSubscriptionPool = xSubscriptionPool
         self.dateProvider = dateProvider
     }
 
@@ -57,10 +60,9 @@ actor GrokProvider: UsageProvider {
                 let planResponse = try? await client.fetchSettings(
                     accessToken: state.token
                 )
-                return try GrokUsageMapper.map(
+                return try await mapUsage(
                     response: response,
-                    planResponse: planResponse,
-                    now: dateProvider.now()
+                    planResponse: planResponse
                 )
             } catch let failure as ProviderFailure {
                 throw failure
@@ -76,6 +78,33 @@ actor GrokProvider: UsageProvider {
             )
         }
         throw ProviderFailure(.transient, "Grok could not be reached.")
+    }
+
+    /// Accounts on The X Subscription have one weekly pool shared with
+    /// Cursor, and xAI's billing endpoint fails for them. When the Grok
+    /// quota can't be read, show that shared pool instead.
+    private func mapUsage(
+        response: HTTPResponse,
+        planResponse: HTTPResponse?
+    ) async throws -> ProviderSnapshot {
+        do {
+            return try GrokUsageMapper.map(
+                response: response,
+                planResponse: planResponse,
+                now: dateProvider.now()
+            )
+        } catch let failure as ProviderFailure
+            where failure.kind == .transient ||
+                failure.kind == .invalidResponse {
+            guard let pool = await xSubscriptionPool?
+                .fetchXSubscriptionPool() else {
+                throw failure
+            }
+            return GrokUsageMapper.snapshot(
+                from: pool,
+                now: dateProvider.now()
+            )
+        }
     }
 
     private func refresh(

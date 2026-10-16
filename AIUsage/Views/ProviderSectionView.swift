@@ -32,6 +32,14 @@ struct ProviderSectionView: View {
                         displayMode: displayMode
                     )
                 }
+                if let note = snapshot.note {
+                    Label(note, systemImage: "link")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 14)
+                        .padding(.bottom, 10)
+                }
             } else if state.isRefreshing {
                 ProviderStatusRow(
                     message: "Checking local login…",
