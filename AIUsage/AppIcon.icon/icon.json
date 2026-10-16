@@ -9,18 +9,18 @@
           "fill-specializations" : [
             {
               "value" : {
-                "automatic-gradient" : "extended-srgb:0.03922,0.59216,0.52157,1.00000"
+                "automatic-gradient" : "extended-srgb:1.00000,0.58431,0.00000,1.00000"
               }
             },
             {
               "appearance" : "dark",
               "value" : {
-                "automatic-gradient" : "extended-srgb:0.34510,0.90588,0.79608,1.00000"
+                "automatic-gradient" : "extended-srgb:1.00000,0.70196,0.25098,1.00000"
               }
             }
           ],
-          "image-name" : "remaining.svg",
-          "name" : "Remaining limits"
+          "image-name" : "plus.svg",
+          "name" : "Plus"
         }
       ],
       "shadow" : {
@@ -39,18 +39,48 @@
           "fill-specializations" : [
             {
               "value" : {
-                "solid" : "extended-srgb:0.10588,0.12157,0.14510,0.42000"
+                "automatic-gradient" : "extended-srgb:0.03922,0.59216,0.52157,1.00000"
               }
             },
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "extended-gray:1.00000,0.30000"
+                "automatic-gradient" : "extended-srgb:0.34510,0.90588,0.79608,1.00000"
               }
             }
           ],
-          "image-name" : "tracks.svg",
-          "name" : "Limit tracks"
+          "image-name" : "remaining.svg",
+          "name" : "Remaining"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.2
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.12
+      }
+    },
+    {
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "extended-srgb:0.10588,0.12157,0.14510,0.16000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:1.00000,0.22000"
+              }
+            }
+          ],
+          "image-name" : "track.svg",
+          "name" : "Track"
         }
       ],
       "shadow" : {
@@ -79,9 +109,9 @@
               }
             }
           ],
-          "glass" : false,
           "image-name" : "background.svg",
-          "name" : "Adaptive background"
+          "name" : "Adaptive background",
+          "glass" : false
         }
       ],
       "shadow" : {
