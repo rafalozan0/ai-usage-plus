@@ -1,8 +1,29 @@
-<?xml version="1.0" standalone="yes"?><!-- sparkle-sign-warning:
+<?xml version="1.0" standalone="yes"?>
+<!-- sparkle-sign-warning:
 IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
---><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+-->
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>AI Usage Plus</title>
+        <item>
+            <title>1.0.1</title>
+            <pubDate>Fri, 16 Oct 2026 06:36:50 +0000</pubDate>
+            <link>https://github.com/rafalozan0/ai-usage-plus</link>
+            <sparkle:version>14</sparkle:version>
+            <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[# AI Usage Plus 1.0.1
+
+- Support The X Subscription. When your Cursor account is merged into an X
+  Subscription, the Cursor card shows the plan as "X Plus" (or your tier) and
+  notes that its weekly pool is shared with Grok.
+- Show the shared X Subscription pool on the Grok card when xAI's own billing
+  endpoint can't report usage for merged accounts, instead of an error.
+- Explain xAI outages clearly instead of showing a bare "request failed (500)".
+- Give AI Usage Plus its own app icon.
+]]></description>
+            <enclosure url="https://github.com/rafalozan0/ai-usage-plus/releases/download/v1.0.1/AI-Usage-Plus.dmg" length="3984024" type="application/octet-stream" sparkle:edSignature="nWiEVVc6hVLRPZbj8N2xC1ZfskPU19YV2x/RTarkoJ+vs8j078yPbQofXTB0VQHvUBuar9IyqZnp8GhVvUfVDQ=="/>
+        </item>
         <item>
             <title>1.0.0</title>
             <pubDate>Fri, 16 Oct 2026 05:39:58 +0000</pubDate>
@@ -26,10 +47,11 @@ fork of [AI Usage](https://github.com/burakgon/ai-usage-menubar) by Burak Gon.
 
 Install with Homebrew: `brew install --cask rafalozan0/tap/ai-usage-plus`.
 ]]></description>
-            <enclosure url="https://github.com/rafalozan0/ai-usage-menubar/releases/download/v1.0.0/AI-Usage-Plus.dmg" length="3960021" type="application/octet-stream" sparkle:edSignature="6VyhTX5U2nbvl19sQdhBJ+dP0CmMubxrnxDtKbm4vslYiD8uhwRbf7n6AAwcJ5J/GsetolsKq5JbGlXAuXhZCg=="></enclosure>
+            <enclosure url="https://github.com/rafalozan0/ai-usage-menubar/releases/download/v1.0.0/AI-Usage-Plus.dmg" length="3960021" type="application/octet-stream" sparkle:edSignature="6VyhTX5U2nbvl19sQdhBJ+dP0CmMubxrnxDtKbm4vslYiD8uhwRbf7n6AAwcJ5J/GsetolsKq5JbGlXAuXhZCg=="/>
         </item>
     </channel>
-</rss><!-- sparkle-signatures:
-edSignature: MNqhOi5IHNRD3Rl7U7ies65mmIdCCb7Ma1M/aMHepdj9tOpeWEfhBNHCl5MBwkAb02be6r9etb+1un1ewEMsCA==
-length: 1990
+</rss>
+<!-- sparkle-signatures:
+edSignature: tBywa8mpUMvlUeIy3f5ReTEKq1+TNoXAysVz4KNKhkDmcyakmOiUXtbMA8vBeqAX7v7blsJVbOisirvmk1Z/CQ==
+length: 3232
 -->
