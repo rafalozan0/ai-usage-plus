@@ -8,19 +8,19 @@ adaptive
 
 <!--
 Impeccable 4.0.2 has no macOS platform token. `adaptive` is used only to route
-future work through native guidance instead of web guidance. AI Usage is a
+future work through native guidance instead of web guidance. AI Usage Plus is a
 native macOS-only product; this is not a cross-platform commitment.
 -->
 
 ## Users
 
-AI Usage is for macOS developers who use Claude Code and/or Codex locally and
+AI Usage Plus is for macOS developers who use Claude Code and/or Codex locally and
 want to check their remaining session or weekly allowance without opening a
 CLI, visiting a provider dashboard, or leaving their current coding workflow.
 
 ## Product Purpose
 
-AI Usage keeps the limits that affect an active coding session visible at a
+AI Usage Plus keeps the limits that affect an active coding session visible at a
 glance from the macOS menu bar. It should make an accurate answer available in
 one click, then get out of the user's way. Success means the user can understand
 their current allowance and reset timing immediately while the app remains
@@ -28,10 +28,10 @@ stable and nearly idle in the background.
 
 ## Positioning
 
-AI Usage is a focused native utility, not an analytics dashboard. It reuses the
+AI Usage Plus is a focused native utility, not an analytics dashboard. It reuses the
 local OAuth sessions already created by the Claude Code and Codex CLIs and
 requests quota data directly from each provider's first-party endpoint. It
-requires no AI Usage account, API key, local server, telemetry, usage-history
+requires no AI Usage Plus account, API key, local server, telemetry, usage-history
 database, or background transcript scanning.
 
 ## Operating Context
@@ -63,7 +63,7 @@ database, or background transcript scanning.
 - Credentials are discovered locally and used only with the corresponding
   first-party provider. Secrets must never be printed, logged, or sent to any
   other service.
-- AI Usage creates no usage cache or history of its own. Provider credential
+- AI Usage Plus creates no usage cache or history of its own. Provider credential
   rotations may be written back to the existing local credential store when
   required to keep the user's CLI session valid.
 - macOS 26 or newer is required. The app is implemented natively with SwiftUI
@@ -76,7 +76,7 @@ database, or background transcript scanning.
 
 ## Brand Commitments
 
-- The product name is **AI Usage**.
+- The product name is **AI Usage Plus**.
 - The interface must feel native to contemporary macOS and preserve its clean,
   compact Liquid Glass identity in light and dark appearances.
 - Claude Code and Codex use recognizable monochrome provider marks in the menu

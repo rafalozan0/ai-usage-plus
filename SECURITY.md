@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are provided for the latest released version of AI Usage.
+Security fixes are provided for the latest released version of AI Usage Plus.
 
 ## Reporting a vulnerability
 
@@ -10,11 +10,11 @@ Please do not open a public issue for a suspected vulnerability.
 
 Use GitHub's private vulnerability reporting form:
 
-https://github.com/burakgon/ai-usage-menubar/security/advisories/new
+https://github.com/rafalozan0/ai-usage-menubar/security/advisories/new
 
 Include the affected version, steps to reproduce, potential impact, and any
 suggested mitigation. You should receive an acknowledgement within 72 hours.
 We will coordinate a fix and disclosure timeline with you when the report is
 confirmed.
 
-Thank you for helping keep AI Usage and its users safe.
+Thank you for helping keep AI Usage Plus and its users safe.

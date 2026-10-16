@@ -6,7 +6,7 @@
   </picture>
 </p>
 
-<h1 align="center">AI Usage</h1>
+<h1 align="center">AI Usage Plus</h1>
 
 <p align="center">
   <strong>Your coding agents' limits, one click away.</strong><br>
@@ -27,8 +27,14 @@
   <sub>A real native menu bar popover — no Dock icon or persistent window.</sub>
 </p>
 
-AI Usage shows Claude Code, Codex, Cursor, Antigravity, GitHub Copilot, Devin,
-and Grok limits and stays out of the way. No extra account, API key, local
+> [!NOTE]
+> AI Usage Plus is an independently maintained, open-source fork of
+> [AI Usage](https://github.com/burakgon/ai-usage-menubar) by Burak Gon. It
+> keeps the same goals and the same MIT license, and ships new providers and
+> fixes on its own schedule. See [Differences from AI Usage](#differences-from-ai-usage).
+
+AI Usage Plus shows Claude Code, Codex, Cursor, Antigravity, GitHub Copilot,
+Devin, Grok, and DeepSeek limits and stays out of the way. No extra account, API key, local
 server, telemetry, usage history, or background log scanning.
 
 ## Choose exactly what appears.
@@ -41,36 +47,82 @@ server, telemetry, usage history, or background log scanning.
   <sub>Track every tool you use. Only selected providers and metrics reach the menu bar.</sub>
 </p>
 
-## Other usage apps stay heavy. AI Usage stays light.
+## Other usage apps stay heavy. AI Usage Plus stays light.
 
 <p align="center">
   <img src="docs/images/efficiency-comparison.svg" width="900" alt="Other always-on usage apps keep CPU, interface memory, and battery activity running. AI Usage releases its interface and only wakes briefly for scheduled refreshes.">
 </p>
 
-## Download
+## Install
+
+### Homebrew (recommended)
+
+```bash
+brew install --cask rafalozan0/tap/ai-usage-plus
+```
+
+The app appears in the menu bar rather than the Dock. macOS 26 or newer is
+required. Updates arrive in-app through Sparkle, so you don't need
+`brew upgrade` for it.
+
+### DMG
 
 <p>
-  <a href="https://github.com/burakgon/ai-usage-menubar/releases/latest/download/AI-Usage.dmg">
-    <img src="https://img.shields.io/badge/Download-DMG-0A84FF?logo=apple&logoColor=white" alt="Download the latest AI Usage DMG">
+  <a href="https://github.com/rafalozan0/ai-usage-menubar/releases/latest/download/AI-Usage-Plus.dmg">
+    <img src="https://img.shields.io/badge/Download-DMG-0A84FF?logo=apple&logoColor=white" alt="Download the latest AI Usage Plus DMG">
   </a>
 </p>
 
-Open the DMG, drag **AI Usage** to Applications, and launch it. It appears in
-the menu bar rather than the Dock. macOS 26 or newer is required.
+Open the DMG, drag **AI Usage Plus** to Applications, and launch it.
+
+### Opening the app the first time
+
+AI Usage Plus is free and open source, and it is not signed with a paid Apple
+Developer ID or notarized by Apple. Homebrew handles this for you. If you
+installed from the DMG, macOS blocks the first launch:
+
+1. Open **AI Usage Plus** once and dismiss the warning.
+2. Go to **System Settings → Privacy & Security**.
+3. Scroll down and click **Open Anyway** next to the AI Usage Plus message,
+   then confirm with your password.
+
+You only need to do this once. Alternatively, run:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/AI Usage Plus.app"
+```
 
 > [!NOTE]
-> Public builds are signed with a Developer ID certificate, notarized by Apple,
-> and protected by Sparkle's EdDSA signature for secure in-app updates.
+> Every release is signed with the same self-signed certificate, so when macOS
+> asks whether AI Usage Plus can read a tool's Keychain item, **Always Allow**
+> keeps working across updates. Updates are protected by Sparkle's EdDSA
+> signature.
+
+## Differences from AI Usage
+
+AI Usage Plus 1.0.0 is based on AI Usage 0.2.1 and adds:
+
+- Antigravity Argon quota pool tracking and the current CLI user agent
+- A DeepSeek provider that shows your API balance as a bar from your starting
+  balance down to zero
+- A fix for provider cards overlapping the footer while scrolling
+- A fix for the Grok icon looking thin and cut off
+- An Edit menu so text fields accept paste
+
+It uses its own bundle identifier (`com.rafalozan0.aiusageplus`), so it can be
+installed next to the original. Useful fixes are still offered upstream as
+pull requests.
 
 ## What you get
 
 - Claude Code session, weekly, Sonnet, and Fable limits
 - Codex session, weekly, Spark, and Spark weekly limits
 - Cursor total, Auto, and API usage
-- Antigravity Gemini and Claude pool limits
+- Antigravity Gemini, Claude, and Argon pool limits
 - GitHub Copilot credits, chat, and completions
 - Devin daily and weekly quota
 - Grok weekly quota
+- DeepSeek API balance
 - Claude Code extra usage and Codex credits when available
 - Remaining or used percentages, switchable directly in the panel
 - Independent menu bar controls and metric choices for each provider
@@ -91,21 +143,21 @@ You need:
 Then:
 
 ```bash
-git clone https://github.com/burakgon/ai-usage-menubar.git
+git clone https://github.com/rafalozan0/ai-usage-menubar.git
 cd ai-usage-menubar
 ./scripts/install.sh
 ```
 
 The script builds a local Release version, installs it to
-`~/Applications/AI Usage.app`, and opens it. AI Usage appears in the menu bar,
-not the Dock.
+`~/Applications/AI Usage Plus.app`, and opens it. AI Usage Plus appears in the
+menu bar, not the Dock.
 
 To run without the installer, open `AIUsage.xcodeproj` in Xcode and run the
 `AIUsage` scheme.
 
 ## How it works
 
-AI Usage reuses credentials already created by supported tools, then requests
+AI Usage Plus reuses credentials already created by supported tools, then requests
 quota data directly from each provider's first-party endpoint.
 
 - Credentials stay on your Mac.
@@ -159,6 +211,8 @@ Release packaging and OTA feed maintenance are documented in
 
 ## Upstream research
 
+AI Usage Plus is a fork of
+[burakgon/ai-usage-menubar](https://github.com/burakgon/ai-usage-menubar).
 Provider contracts and parts of the system-boundary implementation were
 adapted from [OpenUsage](https://github.com/robinebers/openusage), using stable
 tag `v0.7.6` and provider updates through commit
@@ -167,10 +221,11 @@ See [NOTICE](NOTICE) for attribution.
 
 ## License
 
-AI Usage is available under the [MIT License](LICENSE).
+AI Usage Plus is available under the [MIT License](LICENSE), like the
+original AI Usage.
 
 ---
 
-If AI Usage saves you a few clicks, please
-[star the repository](https://github.com/burakgon/ai-usage-menubar). It helps
+If AI Usage Plus saves you a few clicks, please
+[star the repository](https://github.com/rafalozan0/ai-usage-menubar). It helps
 other coding-agent users find it.

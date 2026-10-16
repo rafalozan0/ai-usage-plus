@@ -1,5 +1,11 @@
-AI Usage
-Copyright (c) 2026 Burak Gon
+AI Usage Plus
+Copyright (c) 2026 Rafael Lozano
+
+AI Usage Plus is a fork of AI Usage:
+
+  https://github.com/burakgon/ai-usage-menubar
+  Copyright (c) 2026 Burak Gon
+  MIT License
 
 This project adapts provider-contract research and selected implementation
 patterns from OpenUsage:

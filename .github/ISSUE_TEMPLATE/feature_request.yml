@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        AI Usage intentionally stays small. Please explain the user problem before proposing a larger feature.
+        AI Usage Plus intentionally stays small. Please explain the user problem before proposing a larger feature.
   - type: textarea
     id: problem
     attributes:

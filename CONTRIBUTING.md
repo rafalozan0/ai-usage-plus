@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping make AI Usage better.
+Thanks for helping make AI Usage Plus better.
 
 ## Before you start
 
