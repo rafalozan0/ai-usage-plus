@@ -85,6 +85,124 @@ final class WarpAndDroidTests: XCTestCase {
         XCTAssertEqual(requests[0].url.host, "securetoken.googleapis.com")
         XCTAssertTrue(String(data: requests[0].body!, encoding: .utf8)!.contains("refresh_token=refresh%20%2B%26"))
         XCTAssertEqual(requests[1].url.host, "app.warp.dev")
+        XCTAssertEqual(keychain.accountReads.count, 1, "Quota refreshes must not read the same Keychain secret again")
+    }
+
+    func testWarpBackgroundRefreshNeverRequestsKeychainInteraction() async {
+        let keychain = warpKeychain(token: jwt(expiration: now.timeIntervalSince1970 + 3600))
+        keychain.requiresAccountAuthorization = true
+        let http = MockHTTPClient([])
+        let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain),
+                                   client: WarpUsageClient(http: http), dateProvider: FixedDateProvider(value: now))
+        for _ in 0..<3 {
+            do { _ = try await provider.fetch(); XCTFail("Expected a permission status") }
+            catch let failure as ProviderFailure { XCTAssertEqual(failure.kind, .keychainPermission) }
+            catch { XCTFail("Unexpected failure") }
+        }
+        XCTAssertTrue(keychain.accountReads.allSatisfy { $0.1 == .silent })
+        let requests = await http.capturedRequests()
+        XCTAssertTrue(requests.isEmpty)
+    }
+
+    @MainActor
+    func testExplicitKeychainAuthorizationRestoresUsageWithoutMoreSecretReads() async {
+        let keychain = warpKeychain(token: jwt(expiration: now.timeIntervalSince1970 + 3600))
+        keychain.requiresAccountAuthorization = true
+        let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain),
+            client: WarpUsageClient(http: MockHTTPClient([httpResponse(json: warpUsage), httpResponse(json: warpUsage)])),
+            dateProvider: FixedDateProvider(value: now))
+        let store = UsageStore(providers: [provider],
+            availabilityChecker: FixedProviderAvailabilityChecker(installed: [.warp]))
+        await store.refresh()
+        XCTAssertEqual(store.states[.warp]?.failure?.kind, .keychainPermission)
+        await store.authorizeKeychainAccess(for: .warp)
+        XCTAssertNil(store.states[.warp]?.failure)
+        XCTAssertEqual(store.states[.warp]?.snapshot?.windows.first?.usedPercent, 25)
+        await store.refresh()
+        XCTAssertNil(store.states[.warp]?.failure)
+        XCTAssertEqual(keychain.accountReads.map(\.1), [.silent, .userInitiated])
+    }
+
+    func testWarpCacheAdoptsAccountChangesAndForgetsSignOut() throws {
+        let keychain = warpKeychain(token: "old")
+        let store = WarpAuthStore(keychain: keychain)
+        XCTAssertEqual(try store.load().accessToken, "old")
+        XCTAssertEqual(try store.load().accessToken, "old")
+        XCTAssertEqual(keychain.accountReads.count, 1)
+        keychain.setAccountValue(service: WarpAuthStore.service, account: "User", value:
+            #"{"id_token":{"id_token":"other","refresh_token":"other-refresh"}}"#)
+        XCTAssertEqual(try store.load().accessToken, "other")
+        XCTAssertEqual(keychain.accountReads.count, 2)
+        keychain.setAccountValue(service: WarpAuthStore.service, account: "User", value: nil)
+        XCTAssertThrowsError(try store.load())
+    }
+
+    @MainActor
+    func testCancelingAuthorizationDoesNotCreateAnAutomaticPromptLoop() async {
+        let keychain = warpKeychain(token: jwt(expiration: now.timeIntervalSince1970 + 3600))
+        keychain.requiresAccountAuthorization = true
+        keychain.deniesAccountAuthorization = true
+        let http = MockHTTPClient([])
+        let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain), client: WarpUsageClient(http: http))
+        let store = UsageStore(providers: [provider],
+            availabilityChecker: FixedProviderAvailabilityChecker(installed: [.warp]))
+        await store.refresh()
+        await store.authorizeKeychainAccess(for: .warp)
+        await store.refresh()
+        await store.refresh()
+        XCTAssertEqual(keychain.accountReads.map(\.1), [.silent, .userInitiated, .silent, .silent])
+        XCTAssertEqual(store.states[.warp]?.failure?.kind, .keychainPermission)
+        XCTAssertEqual(store.states[.warp]?.isRefreshing, false)
+        let requests = await http.capturedRequests()
+        XCTAssertTrue(requests.isEmpty)
+    }
+
+    func testWarpNeverPublishesUsageAfterSignOutDuringTheRequest() async {
+        let keychain = warpKeychain(token: jwt(expiration: now.timeIntervalSince1970 + 3600))
+        let http = SignOutDuringUsageClient(keychain: keychain, response: httpResponse(json: warpUsage))
+        let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain), client: WarpUsageClient(http: http),
+                                   dateProvider: FixedDateProvider(value: now))
+        do { _ = try await provider.fetch(); XCTFail("Signed-out usage must not be published") }
+        catch let failure as ProviderFailure { XCTAssertEqual(failure.kind, .authentication) }
+        catch { XCTFail("Unexpected failure") }
+    }
+
+    func testWarpCachePrefersANewCLILoginOverACachedDesktopLogin() throws {
+        let keychain = warpKeychain(token: "desktop")
+        let store = WarpAuthStore(keychain: keychain)
+        XCTAssertEqual(try store.load().accessToken, "desktop")
+        keychain.setAccountValue(service: WarpAuthStore.cliService, account: "User", value:
+            #"{"id_token":{"id_token":"cli","refresh_token":"cli-refresh"}}"#)
+        XCTAssertEqual(try store.load().service, WarpAuthStore.cliService)
+        XCTAssertEqual(try store.load().accessToken, "cli")
+        XCTAssertEqual(keychain.accountReads.count, 2)
+    }
+
+    func testDroidKeychainKeyIsReadOnceAcrossRefreshes() async throws {
+        let original = try DroidAuthStore(files: droidFiles(), keychain: MemoryKeychain()).load()
+        let files = MemoryFiles(["~/.factory/auth.v2.loginkeychain": original.encryptedText])
+        let keychain = MemoryKeychain(accounts: ["Factory CLI/auth-encryption-key-security-cli": key.base64EncodedString()])
+        let provider = DroidProvider(authStore: DroidAuthStore(files: files, keychain: keychain),
+            client: DroidUsageClient(http: MockHTTPClient([httpResponse(json: droidUsage), httpResponse(json: droidUsage)])),
+            dateProvider: FixedDateProvider(value: now))
+        _ = try await provider.fetch()
+        _ = try await provider.fetch()
+        XCTAssertEqual(keychain.accountReads.count, 1)
+        XCTAssertEqual(keychain.accountReads.first?.1, .silent)
+    }
+
+    func testDroidAuthorizationIsExplicitAndItsKeyRemainsCached() throws {
+        let original = try DroidAuthStore(files: droidFiles(), keychain: MemoryKeychain()).load()
+        let files = MemoryFiles(["~/.factory/auth.v2.loginkeychain": original.encryptedText])
+        let keychain = MemoryKeychain(accounts: ["Factory CLI/auth-encryption-key-security-cli": key.base64EncodedString()])
+        keychain.requiresAccountAuthorization = true
+        let store = DroidAuthStore(files: files, keychain: keychain)
+        XCTAssertThrowsError(try store.load()) { error in
+            XCTAssertEqual((error as? ProviderFailure)?.kind, .keychainPermission)
+        }
+        _ = try store.load(interaction: .userInitiated)
+        _ = try store.load()
+        XCTAssertEqual(keychain.accountReads.map(\.1), [.silent, .userInitiated])
     }
 
     func testWarpHonorsCooldownOnManualRefresh() async {
@@ -239,5 +357,15 @@ final class WarpAndDroidTests: XCTestCase {
         let document = Data(#"{"access_token":"\#(jwt(expiration: now.timeIntervalSince1970 + 3600))","refresh_token":"refresh","active_organization_id":"org-test","region":"eu","future_field":"keep"}"#.utf8)
         return MemoryFiles([droidPath: try DroidAuthStore.encrypt(document, key: key),
                             "~/.factory/auth.v2.key": key.base64EncodedString()])
+    }
+}
+
+private struct SignOutDuringUsageClient: HTTPClient {
+    let keychain: MemoryKeychain
+    let response: HTTPResponse
+
+    func send(_ request: HTTPRequest) async throws -> HTTPResponse {
+        keychain.setAccountValue(service: WarpAuthStore.service, account: "User", value: nil)
+        return response
     }
 }

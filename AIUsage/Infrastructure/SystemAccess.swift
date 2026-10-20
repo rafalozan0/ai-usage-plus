@@ -247,12 +247,19 @@ struct LocalTextFileAccessor: TextFileAccessing {
 }
 
 protocol KeychainAccessing: Sendable {
-    func readGenericPassword(service: String, account: String) throws -> String?
+    func readGenericPassword(service: String, account: String, interaction: KeychainInteraction) throws -> String?
+    func genericPasswordRevision(service: String, account: String) throws -> KeychainItemRevision?
     func readGenericPassword(service: String) throws -> String?
     func writeGenericPassword(service: String, value: String) throws
     func readGenericPasswordForCurrentUser(service: String) throws -> String?
     func writeGenericPasswordForCurrentUser(service: String, value: String) throws
     func deleteGenericPasswordForCurrentUser(service: String) throws
+}
+
+extension KeychainAccessing {
+    func readGenericPassword(service: String, account: String) throws -> String? {
+        try readGenericPassword(service: service, account: account, interaction: .silent)
+    }
 }
 
 struct SecurityKeychainAccessor: KeychainAccessing {
@@ -267,10 +274,12 @@ struct SecurityKeychainAccessor: KeychainAccessing {
         try readPassword(["find-generic-password", "-s", service, "-w"])
     }
 
-    func readGenericPassword(service: String, account: String) throws -> String? {
-        // A first read can show a macOS permission prompt. Give the user time
-        // to answer while the provider's background task waits.
-        try readPassword(["find-generic-password", "-s", service, "-a", account, "-w"], timeout: 60)
+    func readGenericPassword(service: String, account: String, interaction: KeychainInteraction) throws -> String? {
+        try ScopedKeychainAccess.read(service: service, account: account, interaction: interaction)
+    }
+
+    func genericPasswordRevision(service: String, account: String) throws -> KeychainItemRevision? {
+        try ScopedKeychainAccess.revision(service: service, account: account)
     }
 
     func readGenericPasswordForCurrentUser(service: String) throws -> String? {
@@ -312,12 +321,12 @@ struct SecurityKeychainAccessor: KeychainAccessing {
         }
     }
 
-    private func readPassword(_ arguments: [String], timeout: TimeInterval = 5) throws -> String? {
+    private func readPassword(_ arguments: [String]) throws -> String? {
         let result = try processRunner.run(
             executable: "/usr/bin/security",
             arguments: arguments,
             environment: [:],
-            timeout: timeout
+            timeout: 5
         )
         guard result.succeeded else {
             if result.exitCode == Self.itemNotFoundExitCode { return nil }
@@ -347,11 +356,13 @@ struct SecurityKeychainAccessor: KeychainAccessing {
 }
 
 enum KeychainError: LocalizedError {
+    case interactionRequired
     case readFailed
     case writeFailed
 
     var errorDescription: String? {
         switch self {
+        case .interactionRequired: "Keychain access needs your permission."
         case .readFailed: "Keychain could not be read."
         case .writeFailed: "Keychain could not be updated."
         }

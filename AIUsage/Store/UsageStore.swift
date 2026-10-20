@@ -47,6 +47,7 @@ final class UsageStore {
     private var cadenceTask: Task<Void, Never>?
     private var refreshTask: Task<Void, Never>?
     private var refreshGeneration = 0
+    private var authorizingProviderIDs: Set<ProviderID> = []
 
     init(
         providers: [any UsageProvider] = [
@@ -122,6 +123,25 @@ final class UsageStore {
         cadenceTask = makeCadenceTask(refreshImmediately: true)
     }
 
+    func authorizeKeychainAccess(for id: ProviderID) async {
+        guard trackedProviderIDs.contains(id), states[id]?.isRefreshing != true,
+              let provider = providers.first(where: { $0.id == id }),
+              authorizingProviderIDs.insert(id).inserted else { return }
+        defer { authorizingProviderIDs.remove(id) }
+        states[id]?.isRefreshing = true
+        let result: Result<ProviderSnapshot, ProviderFailure>
+        do {
+            try await provider.authorizeKeychainAccess()
+            result = .success(try await provider.fetch())
+        } catch let failure as ProviderFailure {
+            result = .failure(failure)
+        } catch {
+            result = .failure(ProviderFailure(.storage, "Keychain access could not be authorized."))
+        }
+        guard trackedProviderIDs.contains(id) else { return }
+        applyFetchResults([FetchResult(provider: id, result: result)])
+    }
+
     func refresh(providerIDs requestedProviderIDs: Set<ProviderID>? = nil) async {
         if let refreshTask {
             await refreshTask.value
@@ -132,6 +152,7 @@ final class UsageStore {
         let generation = refreshGeneration
         let providers = self.providers
         let trackedProviderIDs = self.trackedProviderIDs
+        let authorizingProviderIDs = self.authorizingProviderIDs
         let availabilityChecker = self.availabilityChecker
         let task = Task { [weak self] in
             let installedProviders =
@@ -143,6 +164,7 @@ final class UsageStore {
             let requested = requestedProviderIDs ?? trackedProviderIDs
             let effectiveProviders = providers.filter { provider in
                 trackedProviderIDs.contains(provider.id) &&
+                    !authorizingProviderIDs.contains(provider.id) &&
                     requested.contains(provider.id) &&
                     (installedProviders?.contains(provider.id) ?? true)
             }

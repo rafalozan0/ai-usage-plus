@@ -49,6 +49,10 @@ actor WarpProvider: UsageProvider {
         }
     }
 
+    func authorizeKeychainAccess() async throws {
+        _ = try authStore.load(interaction: .userInitiated)
+    }
+
     private func refresh(_ auth: WarpAuth) async throws -> WarpAuth {
         let response = try await client.refreshToken(auth.refreshToken)
         // Firebase uses HTTP 400 for expired/revoked refresh credentials.

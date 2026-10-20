@@ -522,6 +522,10 @@ private struct ProviderStatusPresentation {
 
         if let failure = state.failure {
             switch failure.kind {
+            case .keychainPermission:
+                text = "Keychain permission needed"
+                systemImage = "lock"
+                color = .orange
             case .authentication:
                 text = "Not logged in"
                 systemImage = "person.crop.circle.badge.exclamationmark"

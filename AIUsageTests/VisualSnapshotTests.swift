@@ -204,6 +204,19 @@ final class VisualSnapshotTests: XCTestCase {
         }
     }
 
+    func testKeychainPermissionActionFitsTheProviderCard() {
+        let state = ProviderState(provider: .warp, failure:
+            ProviderFailure(.keychainPermission, "Allow Keychain access to read your Warp session."))
+        for scheme in [ColorScheme.light, .dark] {
+            let view = ProviderSectionView(state: state, authorizeKeychain: {})
+                .environment(\.colorScheme, scheme)
+            let size = measuredSize(of: view, width: panelWidth - 20)
+            XCTAssertEqual(size.width, panelWidth - 20, accuracy: 0.5)
+            XCTAssertLessThan(size.height, 180)
+            XCTAssertGreaterThan(size.height, 70)
+        }
+    }
+
     func testBillingUsagePresentationKeepsProviderSemanticsDistinct() {
         let locale = Locale(identifier: "en_US")
         let bounded = BillingUsage.boundedSpend(

@@ -60,6 +60,9 @@ final class MemoryKeychain: KeychainAccessing, @unchecked Sendable {
     private var accounts: [String: String]
     private(set) var genericReads: [String] = []
     private(set) var currentUserReads: [String] = []
+    private(set) var accountReads: [(String, KeychainInteraction)] = []
+    var requiresAccountAuthorization = false
+    var deniesAccountAuthorization = false
 
     init(
         generic: [String: String] = [:],
@@ -78,8 +81,27 @@ final class MemoryKeychain: KeychainAccessing, @unchecked Sendable {
         }
     }
 
-    func readGenericPassword(service: String, account: String) throws -> String? {
-        lock.withLock { accounts["\(service)/\(account)"] }
+    func readGenericPassword(service: String, account: String, interaction: KeychainInteraction) throws -> String? {
+        try lock.withLock {
+            accountReads.append(("\(service)/\(account)", interaction))
+            if (requiresAccountAuthorization && interaction == .silent) ||
+                (deniesAccountAuthorization && interaction == .userInitiated) {
+                throw KeychainError.interactionRequired
+            }
+            return accounts["\(service)/\(account)"]
+        }
+    }
+
+    func genericPasswordRevision(service: String, account: String) throws -> KeychainItemRevision? {
+        lock.withLock {
+            accounts["\(service)/\(account)"].map {
+                KeychainItemRevision(reference: Data($0.utf8), modifiedAt: .distantPast)
+            }
+        }
+    }
+
+    func setAccountValue(service: String, account: String, value: String?) {
+        lock.withLock { accounts["\(service)/\(account)"] = value }
     }
 
     func writeGenericPassword(service: String, value: String) throws {

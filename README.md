@@ -105,8 +105,11 @@ xattr -dr com.apple.quarantine "/Applications/AI Usage Plus.app"
 Cards appear only for tools installed on your Mac. Signed-out tools stay visible
 with a short explanation.
 
-Warp and Droid reuse their existing local sessions. On the first refresh,
-macOS may ask you to allow access to their Keychain items. Droid's encrypted
+Warp and Droid reuse their existing local sessions. Automatic refreshes never
+open their Keychain permission dialogs. If access is needed, click **Allow
+Keychain Access…** on the provider card to authorize it explicitly. The secret
+is then reused in memory until the CLI changes or removes its Keychain item.
+Droid's encrypted
 credential file stays encrypted when an expired session is renewed. No API key
 or additional AI Usage Plus login is needed.
 

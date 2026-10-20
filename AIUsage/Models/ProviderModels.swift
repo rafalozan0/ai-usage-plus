@@ -516,6 +516,7 @@ struct ProviderSnapshot: Equatable, Sendable {
 }
 
 enum ProviderFailureKind: String, Sendable {
+    case keychainPermission
     case authentication
     case transient
     case rateLimited
@@ -540,7 +541,7 @@ struct ProviderFailure: LocalizedError, Equatable, Sendable {
         switch kind {
         case .transient, .rateLimited, .invalidResponse:
             true
-        case .authentication, .storage:
+        case .authentication, .storage, .keychainPermission:
             false
         }
     }
@@ -669,6 +670,11 @@ enum RefreshIntervalOption: String, CaseIterable, Identifiable, Sendable {
 protocol UsageProvider: Sendable {
     var id: ProviderID { get }
     func fetch() async throws -> ProviderSnapshot
+    func authorizeKeychainAccess() async throws
+}
+
+extension UsageProvider {
+    func authorizeKeychainAccess() async throws {}
 }
 
 /// The weekly allowance of The X Subscription, which Grok and Cursor share.

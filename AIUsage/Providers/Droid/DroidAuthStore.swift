@@ -16,6 +16,7 @@ struct DroidAuthStore: Sendable {
     static let directory = "~/.factory/"
     let files: TextFileAccessing
     let keychain: KeychainAccessing
+    private let cache = KeychainCredentialCache()
 
     init(files: TextFileAccessing = LocalTextFileAccessor(),
          keychain: KeychainAccessing = SecurityKeychainAccessor()) {
@@ -23,7 +24,7 @@ struct DroidAuthStore: Sendable {
         self.keychain = keychain
     }
 
-    func load() throws -> DroidAuth {
+    func load(interaction: KeychainInteraction = .silent) throws -> DroidAuth {
         let sources = [
             ("auth.v2.loginkeychain", "auth-encryption-key-security-cli"),
             ("auth.v2.keyring", "auth-encryption-key"),
@@ -36,7 +37,14 @@ struct DroidAuthStore: Sendable {
             if account.isEmpty {
                 encodedKey = try files.readText(Self.directory + "auth.v2.key")
             } else {
-                encodedKey = try keychain.readGenericPassword(service: "Factory CLI", account: account)
+                do {
+                    encodedKey = try cache.read(service: "Factory CLI", account: account,
+                                               interaction: interaction, keychain: keychain)
+                } catch KeychainError.interactionRequired {
+                    throw ProviderFailure(.keychainPermission, "Allow Keychain access to read your Droid session.")
+                } catch {
+                    throw ProviderFailure(.storage, "Droid credentials could not be read from the login Keychain.")
+                }
             }
             guard let encodedKey,
                   let key = Data(base64Encoded: encodedKey.trimmingCharacters(in: .whitespacesAndNewlines)),

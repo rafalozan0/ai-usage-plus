@@ -237,6 +237,23 @@ windows. No sessions or transcripts are scanned.
 
 ## Persistence and failure policy
 
+Warp and Droid access their exact service/account items through native Security
+APIs. Automatic reads suppress Keychain interaction; permission failures show
+an **Allow Keychain Access…** action on the provider card. Only that explicit
+action permits a system dialog. No timed `security` subprocess is used for these
+items. The legacy login Keychain's process-wide interaction flag is serialized
+and restored around native calls; no ACL, Keychain lock setting, or system-wide
+security policy is changed.
+
+Secrets are cached only in memory against the item's persistent reference and
+modification date. Refreshes and post-request account checks read unencrypted
+metadata, rather than asking for the same secret again. A changed or removed
+item invalidates the cached value, preserving account-change and sign-out checks.
+
+References: Apple's [file-based Keychain model](https://developer.apple.com/documentation/technotes/tn3137-on-mac-keychains),
+[interaction policy](https://developer.apple.com/documentation/security/seckeychainsetuserinteractionallowed(_:)),
+and [attribute-only reads](https://developer.apple.com/documentation/security/ksecreturnattributes).
+
 Rotated credentials are persisted only to the source from which they were
 loaded. Claude compares the complete ordered credential generation before
 writing and again before publishing usage. Codex compares the exact source

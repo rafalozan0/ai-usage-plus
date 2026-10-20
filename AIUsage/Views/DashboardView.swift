@@ -177,7 +177,10 @@ struct DashboardContentView: View {
                 if let state = store.states[provider] {
                     ProviderSectionView(
                         state: state,
-                        displayMode: usageDisplayMode
+                        displayMode: usageDisplayMode,
+                        authorizeKeychain: {
+                            Task { await store.authorizeKeychainAccess(for: provider) }
+                        }
                     )
                 }
             }

@@ -16,18 +16,21 @@ struct WarpAuthStore: Sendable {
     static let service = "dev.warp.Warp-Stable"
     static let cliService = "dev.warp.Warp-Stable.tui"
     let keychain: KeychainAccessing
+    private let cache = KeychainCredentialCache()
 
     init(keychain: KeychainAccessing = SecurityKeychainAccessor()) {
         self.keychain = keychain
     }
 
-    func load() throws -> WarpAuth {
+    func load(interaction: KeychainInteraction = .silent) throws -> WarpAuth {
         // The standalone Agent CLI has a separate Keychain namespace. Prefer
         // its active account over a potentially old desktop-app login.
         for service in [Self.cliService, Self.service] {
             let text: String?
             do {
-                text = try keychain.readGenericPassword(service: service, account: "User")
+                text = try cache.read(service: service, account: "User", interaction: interaction, keychain: keychain)
+            } catch KeychainError.interactionRequired {
+                throw ProviderFailure(.keychainPermission, "Allow Keychain access to read your Warp session.")
             } catch {
                 throw ProviderFailure(.storage, "Allow access to the Warp session in the login Keychain, then refresh.")
             }

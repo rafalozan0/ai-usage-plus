@@ -4,13 +4,16 @@ import SwiftUI
 struct ProviderSectionView: View {
     let state: ProviderState
     let displayMode: UsageDisplayMode
+    let authorizeKeychain: (@MainActor () -> Void)?
 
     init(
         state: ProviderState,
-        displayMode: UsageDisplayMode = .used
+        displayMode: UsageDisplayMode = .used,
+        authorizeKeychain: (@MainActor () -> Void)? = nil
     ) {
         self.state = state
         self.displayMode = displayMode
+        self.authorizeKeychain = authorizeKeychain
     }
 
     var body: some View {
@@ -54,6 +57,14 @@ struct ProviderSectionView: View {
                     message: "No quota data yet.",
                     systemImage: "chart.bar.xaxis"
                 )
+            }
+
+            if state.failure?.kind == .keychainPermission, let authorizeKeychain {
+                Button("Allow Keychain Access…", action: authorizeKeychain)
+                    .controlSize(.small)
+                    .disabled(state.isRefreshing)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 12)
             }
 
             if state.isStale, let failure = state.failure {
@@ -440,7 +451,7 @@ private struct FailureRow: View {
 
     private var symbol: String {
         switch failure.kind {
-        case .authentication:
+        case .authentication, .keychainPermission:
             "person.crop.circle.badge.exclamationmark"
         case .rateLimited:
             "hourglass"

@@ -52,4 +52,8 @@ actor DroidProvider: UsageProvider {
         try ProviderParsing.requireSuccess(response, provider: "Droid", loginCommand: "droid", now: dateProvider.now())
         return try authStore.saveRefresh(response: response, replacing: current)
     }
+
+    func authorizeKeychainAccess() async throws {
+        _ = try authStore.load(interaction: .userInitiated)
+    }
 }
