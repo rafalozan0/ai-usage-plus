@@ -57,7 +57,9 @@ final class UsageStore {
             CopilotProvider(),
             DevinProvider(),
             GrokProvider(),
-            DeepSeekProvider()
+            DeepSeekProvider(),
+            WarpProvider(),
+            DroidProvider()
         ],
         availabilityChecker: any ProviderAvailabilityChecking =
             SystemProviderAvailabilityChecker(),

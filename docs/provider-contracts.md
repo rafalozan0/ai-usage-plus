@@ -167,6 +167,74 @@ models.
   When the Grok quota can't be read, the Grok card shows Cursor's
   `totalPercentUsed` and `billingCycleEnd` as its weekly window instead.
 
+## Warp (fork only)
+
+Prefers the stable Warp Agent CLI session from Keychain service
+`dev.warp.Warp-Stable.tui`, then the desktop app's `dev.warp.Warp-Stable`,
+always account `User`. These can contain different accounts or an expired
+desktop session alongside a valid CLI login. The JSON field `id_token` contains
+`id_token` and `refresh_token`. Only that account is read; model-provider keys
+stored under the same service are never selected.
+
+- `POST https://app.warp.dev/graphql/v2?op=GetRequestLimitInfo`
+- Bearer Firebase ID token, `GetRequestLimitInfo` GraphQL query with a
+  `RequestContext` containing client and macOS information.
+- Maps `requestLimitInfo.requestsUsedSinceLastRefresh / requestLimit` to the
+  percentage and `nextRefreshTime` to the reset date. The period is read from
+  `requestLimitRefreshDuration`: monthly, weekly, or every two weeks. When both
+  `usageCentsUsedSinceLastRefresh` and `includedUsageCents` exist, uses that
+  dollar allowance instead of legacy credit counts. Unlimited accounts show
+  an explicit status without a fabricated percentage. Purchased usage is
+  outside the included monthly quota.
+- Expiring Firebase ID tokens are exchanged at
+  `https://securetoken.googleapis.com/v1/token` with Warp's public Firebase
+  application identifier. Derived tokens are cached only in memory and bound
+  to the exact local login. The app does not overwrite Warp's Keychain item.
+
+Sources: Warp's first-party
+[query](https://github.com/warpdotdev/warp/blob/master/crates/graphql/src/api/queries/get_request_limit_info.rs),
+[quota fields](https://github.com/warpdotdev/warp/blob/master/crates/graphql/src/api/ai.rs),
+[session storage](https://github.com/warpdotdev/warp/blob/master/crates/warp_server_auth/src/user/persistence.rs),
+the [CLI's separate Keychain namespace](https://github.com/warpdotdev/warp/blob/master/app/src/lib.rs),
+and [billing documentation](https://docs.warp.dev/support-and-community/plans-and-billing/credits).
+Contract checked on October 20, 2026, including a successful live quota fetch
+through the Swift provider using the CLI session. Endpoints are internal and may change.
+
+## Droid / Factory (fork only)
+
+Uses Droid's v2 encrypted credential storage under `~/.factory/`, in order:
+
+1. `auth.v2.loginkeychain`, AES key from Keychain service `Factory CLI`,
+   account `auth-encryption-key-security-cli`.
+2. `auth.v2.keyring`, same service, account `auth-encryption-key`.
+3. `auth.v2.file`, AES key from `auth.v2.key`.
+
+The storage format is `base64(nonce):base64(tag):base64(ciphertext)` using
+AES-256-GCM with a 16-byte nonce and authentication tag. Decrypted JSON contains
+`access_token`, `refresh_token`, optional `active_organization_id`, and optional
+`region`. Credentials and decrypted documents are never logged or cached on disk
+by AI Usage Plus.
+
+- `GET https://api.factory.ai/api/billing/limits` (or `api.eu.factory.ai` for
+  `region: eu`), Bearer token, `X-Factory-Client: cli`, compatible
+  `X-Client-Version`, and the active `X-Factory-Org-Id` when present.
+- Maps `limits.standard` and `limits.core` independently. Each pool exposes
+  `fiveHour`, `weekly`, and `monthly` with `usedPercent` and `windowEnd`.
+  Resetless zero-use windows remain visible. Missing windows are omitted.
+- WorkOS refresh uses
+  `POST https://api.workos.com/user_management/authenticate`, form fields
+  `grant_type=refresh_token`, `refresh_token`, and Factory's public OAuth
+  `client_id`. Rotated tokens are re-encrypted into the original source with
+  owner-only permissions. Unknown fields and the selected organization are
+  preserved. A changed credential generation aborts persistence/publication.
+- Both providers honor HTTP 429 `Retry-After`, including manual refreshes.
+
+Sources: Factory's [individual plan limits](https://docs.factory.ai/pricing/individuals)
+and first-party Droid CLI 0.218.1 installed on this Mac. The local CLI's
+authentication, encrypted storage, and `/limits` request were inspected on
+October 20, 2026. A live read returned HTTP 200 with both pools and all six
+windows. No sessions or transcripts are scanned.
+
 ## Persistence and failure policy
 
 Rotated credentials are persisted only to the source from which they were

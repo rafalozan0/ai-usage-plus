@@ -51,7 +51,11 @@ database, or background transcript scanning.
 
 ## Capabilities and Constraints
 
-- Supported providers are intentionally limited to Claude Code and Codex.
+- Supported providers are Claude Code, Codex, Cursor, Antigravity, GitHub
+  Copilot, Devin, Grok, DeepSeek, Warp, and Droid (Factory).
+- Warp shows the account's monthly included allowance shared with its CLI.
+  Droid shows independent Standard and Core pools with 5-hour, 7-day, and
+  30-day windows. Absent windows are omitted, never inferred from local logs.
 - Claude Code surfaces session, weekly, Sonnet, and Fable quota windows.
 - Codex surfaces session, weekly, Spark, and Spark Weekly quota windows.
 - Automatic menu-bar selection compares the selected primary period across

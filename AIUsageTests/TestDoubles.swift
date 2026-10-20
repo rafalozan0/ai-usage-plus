@@ -57,15 +57,18 @@ final class MemoryKeychain: KeychainAccessing, @unchecked Sendable {
     private let lock = NSLock()
     private var generic: [String: String]
     private var currentUser: [String: String]
+    private var accounts: [String: String]
     private(set) var genericReads: [String] = []
     private(set) var currentUserReads: [String] = []
 
     init(
         generic: [String: String] = [:],
-        currentUser: [String: String] = [:]
+        currentUser: [String: String] = [:],
+        accounts: [String: String] = [:]
     ) {
         self.generic = generic
         self.currentUser = currentUser
+        self.accounts = accounts
     }
 
     func readGenericPassword(service: String) throws -> String? {
@@ -73,6 +76,10 @@ final class MemoryKeychain: KeychainAccessing, @unchecked Sendable {
             genericReads.append(service)
             return generic[service]
         }
+    }
+
+    func readGenericPassword(service: String, account: String) throws -> String? {
+        lock.withLock { accounts["\(service)/\(account)"] }
     }
 
     func writeGenericPassword(service: String, value: String) throws {

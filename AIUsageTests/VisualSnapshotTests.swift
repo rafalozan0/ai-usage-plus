@@ -186,6 +186,24 @@ final class VisualSnapshotTests: XCTestCase {
         XCTAssertGreaterThan(size.height, 130)
     }
 
+    func testDroidSixQuotaWindowsFitTheProviderCard() {
+        for scheme in [ColorScheme.light, .dark] {
+            let snapshot = ProviderSnapshot(
+                provider: .droid, planName: nil,
+                windows: [QuotaKind.session, .weekly, .monthly, .coreSession, .coreWeekly, .coreMonthly].map {
+                    QuotaWindow(kind: $0, usedPercent: 12.5, resetsAt: Date().addingTimeInterval(3600))
+                },
+                note: "Standard Usage and Droid Core have separate limits.", fetchedAt: Date()
+            )
+            let view = ProviderSectionView(state: ProviderState(provider: .droid, snapshot: snapshot))
+                .environment(\.colorScheme, scheme)
+            let size = measuredSize(of: view, width: panelWidth - 20)
+            XCTAssertEqual(size.width, panelWidth - 20, accuracy: 0.5)
+            XCTAssertLessThan(size.height, 300)
+            XCTAssertGreaterThan(size.height, 180)
+        }
+    }
+
     func testBillingUsagePresentationKeepsProviderSemanticsDistinct() {
         let locale = Locale(identifier: "en_US")
         let bounded = BillingUsage.boundedSpend(

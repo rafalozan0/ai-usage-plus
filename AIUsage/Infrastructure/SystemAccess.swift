@@ -247,6 +247,7 @@ struct LocalTextFileAccessor: TextFileAccessing {
 }
 
 protocol KeychainAccessing: Sendable {
+    func readGenericPassword(service: String, account: String) throws -> String?
     func readGenericPassword(service: String) throws -> String?
     func writeGenericPassword(service: String, value: String) throws
     func readGenericPasswordForCurrentUser(service: String) throws -> String?
@@ -264,6 +265,12 @@ struct SecurityKeychainAccessor: KeychainAccessing {
 
     func readGenericPassword(service: String) throws -> String? {
         try readPassword(["find-generic-password", "-s", service, "-w"])
+    }
+
+    func readGenericPassword(service: String, account: String) throws -> String? {
+        // A first read can show a macOS permission prompt. Give the user time
+        // to answer while the provider's background task waits.
+        try readPassword(["find-generic-password", "-s", service, "-a", account, "-w"], timeout: 60)
     }
 
     func readGenericPasswordForCurrentUser(service: String) throws -> String? {
@@ -305,12 +312,12 @@ struct SecurityKeychainAccessor: KeychainAccessing {
         }
     }
 
-    private func readPassword(_ arguments: [String]) throws -> String? {
+    private func readPassword(_ arguments: [String], timeout: TimeInterval = 5) throws -> String? {
         let result = try processRunner.run(
             executable: "/usr/bin/security",
             arguments: arguments,
             environment: [:],
-            timeout: 5
+            timeout: timeout
         )
         guard result.succeeded else {
             if result.exitCode == Self.itemNotFoundExitCode { return nil }

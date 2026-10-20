@@ -62,7 +62,11 @@ struct SettingsView: View {
     }
 
     private var providerRows: some View {
-        providerRowsContent(ProviderCatalog.all)
+        ScrollView {
+            providerRowsContent(ProviderCatalog.all)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .frame(height: 380)
     }
 
     private func providerRowsContent(

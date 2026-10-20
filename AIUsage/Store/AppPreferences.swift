@@ -86,8 +86,18 @@ final class AppPreferences {
            defaults.object(forKey: Key.openUsageProvidersAdded) == nil {
             initialTrackedProviders.formUnion(Self.openUsageProviders)
         }
+        if restoredProviders != nil,
+           defaults.object(forKey: Key.warpAndDroidProvidersAdded) == nil {
+            initialTrackedProviders.formUnion([.warp, .droid])
+        }
         trackedProviderIDs = initialTrackedProviders
+        // Property observers do not run during initialization. Persist migrations
+        // before marking them complete so they survive the next launch.
+        defaults.set(Self.encode(Array(initialTrackedProviders).sorted {
+            $0.rawValue < $1.rawValue
+        }), forKey: Key.trackedProviderIDs)
         defaults.set(true, forKey: Key.openUsageProvidersAdded)
+        defaults.set(true, forKey: Key.warpAndDroidProvidersAdded)
 
         let storedVisibleProviders = Self.decode(
             [ProviderID].self,
@@ -460,6 +470,8 @@ final class AppPreferences {
         static let hasCompletedInitialSetup = "initialSettingsCompleted.v1"
         static let openUsageProvidersAdded =
             "openUsageProvidersAdded.v1"
+        static let warpAndDroidProvidersAdded =
+            "warpAndDroidProvidersAdded.v1"
         static let menuBarSelection = "menuBarSelection"
         static let menuBarWindow = "menuBarWindow"
         static let usageDisplayMode = "usageDisplayMode"

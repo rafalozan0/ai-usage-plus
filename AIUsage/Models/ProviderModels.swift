@@ -9,6 +9,8 @@ enum ProviderID: String, CaseIterable, Codable, Identifiable, Sendable {
     case devin
     case grok
     case deepseek
+    case warp
+    case droid
 
     var id: Self { self }
 
@@ -22,6 +24,8 @@ enum ProviderID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .devin: "Devin"
         case .grok: "Grok"
         case .deepseek: "DeepSeek"
+        case .warp: "Warp"
+        case .droid: "Droid (Factory)"
         }
     }
 
@@ -35,6 +39,8 @@ enum ProviderID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .devin: "ProviderDevin"
         case .grok: "ProviderGrok"
         case .deepseek: "ProviderDeepSeek"
+        case .warp: "ProviderWarp"
+        case .droid: "ProviderDroid"
         }
     }
 
@@ -59,6 +65,8 @@ enum ProviderID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .devin: ["devin"]
         case .grok: ["grok"]
         case .deepseek: []
+        case .warp: ["warp"]
+        case .droid: ["droid"]
         }
     }
 
@@ -97,6 +105,10 @@ enum ProviderID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .deepseek:
             // Detected by the presence of a stored API key instead.
             []
+        case .warp:
+            ["~/.warp", "~/.warp_cli", "/Applications/Warp.app", "~/Applications/Warp.app"]
+        case .droid:
+            ["~/.factory"]
         }
     }
 
@@ -105,12 +117,18 @@ enum ProviderID: String, CaseIterable, Codable, Identifiable, Sendable {
         case .cursor: .totalUsage
         case .copilot: .credits
         case .deepseek: .credits
-        case .claude, .codex, .antigravity, .devin, .grok: .weekly
+        case .warp: .monthly
+        case .claude, .codex, .antigravity, .devin, .grok, .droid: .weekly
         }
     }
 }
 
 enum QuotaKind: String, Codable, Hashable, Sendable {
+    case biweekly
+    case monthly
+    case coreSession
+    case coreWeekly
+    case coreMonthly
     case session
     case weekly
     case daily
@@ -130,6 +148,11 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
 
     var title: String {
         switch self {
+        case .biweekly: "Two Weeks"
+        case .monthly: "Monthly"
+        case .coreSession: "Core Session"
+        case .coreWeekly: "Core Weekly"
+        case .coreMonthly: "Core Monthly"
         case .session: "Session"
         case .weekly: "Weekly"
         case .daily: "Daily"
@@ -151,6 +174,11 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
 
     var menuBarMetric: MenuBarMetricID {
         switch self {
+        case .biweekly: .biweekly
+        case .monthly: .monthly
+        case .coreSession: .coreSession
+        case .coreWeekly: .coreWeekly
+        case .coreMonthly: .coreMonthly
         case .session: .session
         case .weekly: .weekly
         case .daily: .daily
@@ -172,6 +200,11 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
 }
 
 enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
+    case biweekly
+    case monthly
+    case coreSession
+    case coreWeekly
+    case coreMonthly
     case session
     case weekly
     case daily
@@ -194,6 +227,11 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
 
     var title: String {
         switch self {
+        case .biweekly: "Two Weeks"
+        case .monthly: "Monthly"
+        case .coreSession: "Core Session"
+        case .coreWeekly: "Core Weekly"
+        case .coreMonthly: "Core Monthly"
         case .session: "Session"
         case .weekly: "Weekly"
         case .daily: "Daily"
@@ -216,6 +254,10 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
 
     var systemImage: String {
         switch self {
+        case .biweekly: "calendar"
+        case .monthly, .coreMonthly: "calendar"
+        case .coreSession: "clock"
+        case .coreWeekly: "calendar.badge.clock"
         case .session: "clock"
         case .weekly: "calendar"
         case .daily: "sun.max"
@@ -238,6 +280,11 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
 
     var compactLabel: String {
         switch self {
+        case .biweekly: "2W"
+        case .monthly: "M"
+        case .coreSession: "CS"
+        case .coreWeekly: "CW"
+        case .coreMonthly: "CM"
         case .session: "S"
         case .weekly: "W"
         case .daily: "D"
@@ -260,6 +307,11 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
 
     var quotaKind: QuotaKind? {
         switch self {
+        case .biweekly: .biweekly
+        case .monthly: .monthly
+        case .coreSession: .coreSession
+        case .coreWeekly: .coreWeekly
+        case .coreMonthly: .coreMonthly
         case .session: .session
         case .weekly: .weekly
         case .daily: .daily

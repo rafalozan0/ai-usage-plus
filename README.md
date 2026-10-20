@@ -32,7 +32,7 @@
 </p>
 
 AI Usage Plus shows how much is left on Claude Code, Codex, Cursor,
-Antigravity, GitHub Copilot, Devin, Grok, and DeepSeek, then gets out of the
+Antigravity, GitHub Copilot, Devin, Grok, DeepSeek, Warp, and Droid (Factory), then gets out of the
 way. No extra account, local server, telemetry, usage history, or background
 log scanning.
 
@@ -99,9 +99,16 @@ xattr -dr com.apple.quarantine "/Applications/AI Usage Plus.app"
 | Devin | Devin CLI login | Daily and weekly quota |
 | Grok | `grok login` | Weekly quota, or the shared X Subscription pool |
 | DeepSeek | API key pasted in Settings | API balance |
+| Warp | Warp app or CLI login | Monthly included allowance shared by the app and CLI |
+| Droid (Factory) | Droid CLI login | Standard and Droid Core limits: 5 hours, weekly, and monthly |
 
 Cards appear only for tools installed on your Mac. Signed-out tools stay visible
 with a short explanation.
+
+Warp and Droid reuse their existing local sessions. On the first refresh,
+macOS may ask you to allow access to their Keychain items. Droid's encrypted
+credential file stays encrypted when an expired session is renewed. No API key
+or additional AI Usage Plus login is needed.
 
 ### The X Subscription (Grok + Cursor)
 

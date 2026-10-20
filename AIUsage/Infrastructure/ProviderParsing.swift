@@ -3,6 +3,28 @@ import CoreFoundation
 import Foundation
 
 enum ProviderParsing {
+    static func requireSuccess(
+        _ response: HTTPResponse,
+        provider: String,
+        loginCommand: String,
+        now: Date
+    ) throws {
+        switch response.statusCode {
+        case 200..<300: return
+        case 401, 403:
+            throw ProviderFailure(.authentication, "\(provider) session expired. Run `\(loginCommand)`.")
+        case 429:
+            throw ProviderFailure(
+                .rateLimited, "\(provider) is rate limited. Try again later.",
+                retryAt: retryDate(from: response, now: now)
+            )
+        default:
+            throw ProviderFailure(
+                response.statusCode >= 500 ? .transient : .invalidResponse,
+                "\(provider) usage request failed (\(response.statusCode))."
+            )
+        }
+    }
     static func object(from data: Data) throws -> [String: Any] {
         guard
             let value = try JSONSerialization.jsonObject(with: data) as? [String: Any]

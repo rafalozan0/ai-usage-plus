@@ -73,7 +73,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+The Warp provider mark is adapted from Warp's official monochrome asset:
+https://github.com/warpdotdev/warp/blob/master/app/assets/bundled/svg/warp-logo-neutral.svg
+The Factory provider mark is adapted from https://factory.ai/favicon.svg.
+Both are rendered as monochrome template images to identify the services.
+
 Claude is a trademark of Anthropic PBC. OpenAI and Codex are trademarks of
 OpenAI, L.L.C. Cursor, Antigravity, GitHub Copilot, Devin, and Grok are marks
-of their respective owners. The marks are used only to identify their
+of their respective owners, as are Warp and Factory. The marks are used only to identify their
 respective services; no endorsement is implied.

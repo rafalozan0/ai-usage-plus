@@ -17,7 +17,7 @@ struct ProviderSectionView: View {
         VStack(alignment: .leading, spacing: 0) {
             providerHeader
             if let snapshot = state.snapshot,
-               !snapshot.windows.isEmpty || snapshot.billingUsage != nil {
+               !snapshot.windows.isEmpty || snapshot.billingUsage != nil || snapshot.note != nil {
                 if !snapshot.windows.isEmpty {
                     QuotaGrid(
                         windows: snapshot.windows,
