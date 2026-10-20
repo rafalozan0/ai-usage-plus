@@ -14,8 +14,8 @@ native macOS-only product; this is not a cross-platform commitment.
 
 ## Users
 
-AI Usage Plus is for macOS developers who use Claude Code and/or Codex locally and
-want to check their remaining session or weekly allowance without opening a
+AI Usage Plus is for macOS developers who use Claude Code, Codex, or other
+supported coding agents locally and want to check their remaining session or weekly allowance without opening a
 CLI, visiting a provider dashboard, or leaving their current coding workflow.
 
 ## Product Purpose
@@ -56,6 +56,10 @@ database, or background transcript scanning.
 - Warp shows the account's monthly included allowance shared with its CLI.
   Droid shows independent Standard and Core pools with 5-hour, 7-day, and
   30-day windows. Absent windows are omitted, never inferred from local logs.
+- Independent pools never share a row in a provider card. When every pool has
+  three windows, as with Droid, each pool is one row so periods line up.
+- Keychain permission dialogs are shown only after the user asks for them from
+  a provider card, never during automatic refreshes.
 - Claude Code surfaces session, weekly, Sonnet, and Fable quota windows.
 - Codex surfaces session, weekly, Spark, and Spark Weekly quota windows.
 - Automatic menu-bar selection compares the selected primary period across

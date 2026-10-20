@@ -67,8 +67,8 @@ final class LaunchAtLoginController {
         } catch {
             isEnabled = previous
             errorMessage = enabled
-                ? "Launch at Login could not be enabled."
-                : "Launch at Login could not be disabled."
+                ? String(localized: "Launch at Login could not be enabled.")
+                : String(localized: "Launch at Login could not be disabled.")
         }
     }
 
@@ -101,7 +101,7 @@ final class LaunchAtLoginController {
         case .unavailable:
             isEnabled = false
             requiresApproval = false
-            errorMessage = "Launch at Login is unavailable for this build."
+            errorMessage = String(localized: "Launch at Login is unavailable for this build.")
         }
     }
 }

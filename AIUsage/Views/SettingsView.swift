@@ -228,9 +228,9 @@ struct SettingsView: View {
     }
 
     private func sectionHeader(
-        title: String,
+        title: LocalizedStringKey,
         systemImage: String,
-        detail: String
+        detail: LocalizedStringKey
     ) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Label(title, systemImage: systemImage)
@@ -465,15 +465,15 @@ private struct ProviderSettingsRow: View {
 
     private var emptyMetricsMessage: String {
         if state?.isToolInstalled == false {
-            return "Not installed"
+            return String(localized: "Not installed")
         }
         if state?.isRefreshing == true {
-            return "Loading available metrics…"
+            return String(localized: "Loading available metrics…")
         }
         if state?.failure?.kind == .authentication {
-            return "Log in to choose metrics"
+            return String(localized: "Log in to choose metrics")
         }
-        return "No usage metrics returned"
+        return String(localized: "No usage metrics returned")
     }
 
     private func enabledMetricHelp(
@@ -481,8 +481,8 @@ private struct ProviderSettingsRow: View {
         isSelected: Bool
     ) -> String {
         isSelected
-            ? "Hide \(metric.title) for \(descriptor.displayName)"
-            : "Show \(metric.title) for \(descriptor.displayName)"
+            ? String(localized: "Hide \(metric.title) for \(descriptor.displayName)")
+            : String(localized: "Show \(metric.title) for \(descriptor.displayName)")
     }
 }
 
@@ -507,14 +507,14 @@ private struct ProviderStatusPresentation {
 
     init(state: ProviderState?) {
         guard let state else {
-            text = "Checking…"
+            text = String(localized: "Checking…")
             systemImage = "clock"
             color = .secondary
             return
         }
 
         if state.isToolInstalled == false {
-            text = "Not installed"
+            text = String(localized: "Not installed")
             systemImage = "minus.circle"
             color = .secondary
             return
@@ -523,21 +523,21 @@ private struct ProviderStatusPresentation {
         if let failure = state.failure {
             switch failure.kind {
             case .keychainPermission:
-                text = "Keychain permission needed"
+                text = String(localized: "Keychain permission needed")
                 systemImage = "lock"
                 color = .orange
             case .authentication:
-                text = "Not logged in"
+                text = String(localized: "Not logged in")
                 systemImage = "person.crop.circle.badge.exclamationmark"
                 color = .orange
             case .rateLimited:
-                text = "Rate limited"
+                text = String(localized: "Rate limited")
                 systemImage = "hourglass"
                 color = .orange
             case .transient, .invalidResponse, .storage:
                 text = state.snapshot == nil
-                    ? "Temporarily unavailable"
-                    : "Showing last update"
+                    ? String(localized: "Temporarily unavailable")
+                    : String(localized: "Showing last update")
                 systemImage = "exclamationmark.triangle"
                 color = .orange
             }
@@ -545,11 +545,13 @@ private struct ProviderStatusPresentation {
         }
 
         if state.snapshot != nil {
-            text = "Connected"
+            text = String(localized: "Connected")
             systemImage = "checkmark.circle.fill"
             color = .green
         } else {
-            text = state.isRefreshing ? "Checking…" : "Waiting for usage"
+            text = state.isRefreshing
+                ? String(localized: "Checking…")
+                : String(localized: "Waiting for usage")
             systemImage = "clock"
             color = .secondary
         }

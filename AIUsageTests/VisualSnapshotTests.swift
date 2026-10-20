@@ -193,20 +193,59 @@ final class VisualSnapshotTests: XCTestCase {
                 windows: [QuotaKind.session, .weekly, .monthly, .coreSession, .coreWeekly, .coreMonthly].map {
                     QuotaWindow(kind: $0, usedPercent: 12.5, resetsAt: Date().addingTimeInterval(3600))
                 },
-                note: "Standard Usage and Droid Core have separate limits.", fetchedAt: Date()
+                fetchedAt: Date()
             )
             let view = ProviderSectionView(state: ProviderState(provider: .droid, snapshot: snapshot))
                 .environment(\.colorScheme, scheme)
             let size = measuredSize(of: view, width: panelWidth - 20)
             XCTAssertEqual(size.width, panelWidth - 20, accuracy: 0.5)
-            XCTAssertLessThan(size.height, 300)
-            XCTAssertGreaterThan(size.height, 180)
+            XCTAssertLessThan(size.height, 240)
+            XCTAssertGreaterThan(size.height, 150)
         }
+    }
+
+    func testUpdatedLabelUsesMinutePrecision() {
+        let now = Date()
+        XCTAssertEqual(DashboardView.updatedText(now.addingTimeInterval(-59), now: now), "Updated just now")
+        XCTAssertNotEqual(DashboardView.updatedText(now.addingTimeInterval(-180), now: now), "Updated just now")
+        XCTAssertTrue(DashboardView.updatedText(now.addingTimeInterval(-180), now: now).hasPrefix("Updated "))
+    }
+
+    func testQuotaPoolsNeverShareARow() {
+        func rows(_ kinds: [QuotaKind]) -> [[QuotaKind]] {
+            QuotaGrid.rows(for: kinds.map { QuotaWindow(kind: $0, usedPercent: 0, resetsAt: nil) })
+                .map { $0.map(\.kind) }
+        }
+
+        XCTAssertEqual(
+            rows([.session, .weekly, .monthly, .coreSession, .coreWeekly, .coreMonthly]),
+            [[.session, .weekly, .monthly], [.coreSession, .coreWeekly, .coreMonthly]]
+        )
+        XCTAssertEqual(
+            rows([.session, .weekly, .monthly]),
+            [[.session, .weekly], [.monthly]]
+        )
+        XCTAssertEqual(
+            rows([.session, .weekly, .monthly, .coreWeekly]),
+            [[.session, .weekly], [.monthly], [.coreWeekly]]
+        )
+        XCTAssertEqual(
+            rows([.weekly, .sparkSession, .sparkWeekly]),
+            [[.weekly], [.sparkSession, .sparkWeekly]]
+        )
+        XCTAssertEqual(
+            rows([.session, .weekly, .claudePool, .claudePoolWeekly, .argonWeekly]),
+            [[.session, .weekly], [.claudePool, .claudePoolWeekly], [.argonWeekly]]
+        )
+        XCTAssertEqual(
+            rows([.session, .weekly, .sonnet, .fable]),
+            [[.session, .weekly], [.sonnet, .fable]]
+        )
     }
 
     func testKeychainPermissionActionFitsTheProviderCard() {
         let state = ProviderState(provider: .warp, failure:
-            ProviderFailure(.keychainPermission, "Allow Keychain access to read your Warp session."))
+            ProviderFailure(.keychainPermission, "Warp's session is in the Keychain. Choose Always Allow so macOS doesn't ask again."))
         for scheme in [ColorScheme.light, .dark] {
             let view = ProviderSectionView(state: state, authorizeKeychain: {})
                 .environment(\.colorScheme, scheme)

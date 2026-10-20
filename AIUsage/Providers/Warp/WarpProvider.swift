@@ -35,7 +35,7 @@ actor WarpProvider: UsageProvider {
                 response = try await client.fetchUsage(accessToken: auth.accessToken)
             }
             let snapshot = try WarpUsageMapper.map(response: response, now: now)
-            guard try authStore.load() == login else {
+            guard try authStore.load().account == login.account else {
                 cachedAuth = nil
                 cachedLogin = nil
                 throw ProviderFailure(.authentication, "Warp login changed. Refresh to load the current account.")

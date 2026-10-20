@@ -134,9 +134,9 @@ enum AntigravityUsageMapper {
         let order: [QuotaKind] = [
             .session,
             .weekly,
-            .argonWeekly,
             .claudePool,
-            .claudePoolWeekly
+            .claudePoolWeekly,
+            .argonWeekly
         ]
         return windows.sorted {
             (order.firstIndex(of: $0.kind) ?? 99)

@@ -148,27 +148,41 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
 
     var title: String {
         switch self {
-        case .biweekly: "Two Weeks"
-        case .monthly: "Monthly"
-        case .coreSession: "Core Session"
-        case .coreWeekly: "Core Weekly"
-        case .coreMonthly: "Core Monthly"
-        case .session: "Session"
-        case .weekly: "Weekly"
-        case .daily: "Daily"
-        case .sonnet: "Sonnet"
-        case .fable: "Fable"
-        case .sparkSession: "Spark"
-        case .sparkWeekly: "Spark Weekly"
-        case .totalUsage: "Total Usage"
-        case .autoUsage: "Auto Usage"
-        case .apiUsage: "API Usage"
-        case .credits: "Credits"
-        case .chat: "Chat"
-        case .completions: "Completions"
-        case .claudePool: "Claude"
-        case .claudePoolWeekly: "Claude Weekly"
-        case .argonWeekly: "Argon Weekly"
+        case .biweekly: String(localized: "Two Weeks")
+        case .monthly: String(localized: "Monthly")
+        case .coreSession: String(localized: "Core Session")
+        case .coreWeekly: String(localized: "Core Weekly")
+        case .coreMonthly: String(localized: "Core Monthly")
+        case .session: String(localized: "Session")
+        case .weekly: String(localized: "Weekly")
+        case .daily: String(localized: "Daily")
+        case .sonnet: String(localized: "Sonnet")
+        case .fable: String(localized: "Fable")
+        case .sparkSession: String(localized: "Spark")
+        case .sparkWeekly: String(localized: "Spark Weekly")
+        case .totalUsage: String(localized: "Total Usage")
+        case .autoUsage: String(localized: "Auto Usage")
+        case .apiUsage: String(localized: "API Usage")
+        case .credits: String(localized: "Credits")
+        case .chat: String(localized: "Chat")
+        case .completions: String(localized: "Completions")
+        case .claudePool: String(localized: "Claude")
+        case .claudePoolWeekly: String(localized: "Claude Weekly")
+        case .argonWeekly: String(localized: "Argon Weekly")
+        }
+    }
+
+    /// The allowance this window draws from. Windows from different pools
+    /// never share a row in the provider card.
+    var pool: QuotaPool {
+        switch self {
+        case .coreSession, .coreWeekly, .coreMonthly: .droidCore
+        case .sparkSession, .sparkWeekly: .spark
+        case .claudePool, .claudePoolWeekly: .claude
+        case .argonWeekly: .argon
+        case .biweekly, .monthly, .session, .weekly, .daily, .sonnet, .fable,
+             .totalUsage, .autoUsage, .apiUsage, .credits, .chat, .completions:
+            .standard
         }
     }
 
@@ -199,6 +213,14 @@ enum QuotaKind: String, Codable, Hashable, Sendable {
     }
 }
 
+enum QuotaPool: Hashable, Sendable {
+    case standard
+    case spark
+    case claude
+    case argon
+    case droidCore
+}
+
 enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
     case biweekly
     case monthly
@@ -227,28 +249,28 @@ enum MenuBarMetricID: String, CaseIterable, Codable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .biweekly: "Two Weeks"
-        case .monthly: "Monthly"
-        case .coreSession: "Core Session"
-        case .coreWeekly: "Core Weekly"
-        case .coreMonthly: "Core Monthly"
-        case .session: "Session"
-        case .weekly: "Weekly"
-        case .daily: "Daily"
-        case .sonnet: "Sonnet"
-        case .fable: "Fable"
-        case .spark: "Spark"
-        case .sparkWeekly: "Spark Weekly"
-        case .totalUsage: "Total Usage"
-        case .autoUsage: "Auto Usage"
-        case .apiUsage: "API Usage"
-        case .chat: "Chat"
-        case .completions: "Completions"
-        case .claudePool: "Claude"
-        case .claudePoolWeekly: "Claude Weekly"
-        case .argonWeekly: "Argon Weekly"
-        case .extraUsage: "Extra Usage"
-        case .credits: "Credits"
+        case .biweekly: String(localized: "Two Weeks")
+        case .monthly: String(localized: "Monthly")
+        case .coreSession: String(localized: "Core Session")
+        case .coreWeekly: String(localized: "Core Weekly")
+        case .coreMonthly: String(localized: "Core Monthly")
+        case .session: String(localized: "Session")
+        case .weekly: String(localized: "Weekly")
+        case .daily: String(localized: "Daily")
+        case .sonnet: String(localized: "Sonnet")
+        case .fable: String(localized: "Fable")
+        case .spark: String(localized: "Spark")
+        case .sparkWeekly: String(localized: "Spark Weekly")
+        case .totalUsage: String(localized: "Total Usage")
+        case .autoUsage: String(localized: "Auto Usage")
+        case .apiUsage: String(localized: "API Usage")
+        case .chat: String(localized: "Chat")
+        case .completions: String(localized: "Completions")
+        case .claudePool: String(localized: "Claude")
+        case .claudePoolWeekly: String(localized: "Claude Weekly")
+        case .argonWeekly: String(localized: "Argon Weekly")
+        case .extraUsage: String(localized: "Extra Usage")
+        case .credits: String(localized: "Credits")
         }
     }
 
@@ -529,7 +551,13 @@ struct ProviderFailure: LocalizedError, Equatable, Sendable {
     let message: String
     let retryAt: Date?
 
-    init(_ kind: ProviderFailureKind, _ message: String, retryAt: Date? = nil) {
+    /// Messages are user-facing, so literals passed here are extracted into
+    /// the String Catalog and shown in the user's language.
+    init(_ kind: ProviderFailureKind, _ message: LocalizedStringResource, retryAt: Date? = nil) {
+        self.init(kind, verbatim: String(localized: message), retryAt: retryAt)
+    }
+
+    init(_ kind: ProviderFailureKind, verbatim message: String, retryAt: Date? = nil) {
         self.kind = kind
         self.message = message
         self.retryAt = retryAt
@@ -571,10 +599,10 @@ enum MenuBarSelection: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .automatic: "Auto — Highest usage"
-        case .all: "All providers"
-        case .claude: "Claude Code"
-        case .codex: "Codex"
+        case .automatic: String(localized: "Auto — Highest usage")
+        case .all: String(localized: "All providers")
+        case .claude: String(localized: "Claude Code")
+        case .codex: String(localized: "Codex")
         }
     }
 
@@ -595,8 +623,8 @@ enum MenuBarWindow: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .session: "Session"
-        case .weekly: "Weekly"
+        case .session: String(localized: "Session")
+        case .weekly: String(localized: "Weekly")
         }
     }
 }
@@ -611,15 +639,15 @@ enum UsageDisplayMode: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .used: "Used"
-        case .remaining: "Left"
+        case .used: String(localized: "Used")
+        case .remaining: String(localized: "Left")
         }
     }
 
     var valueSuffix: String {
         switch self {
-        case .used: "used"
-        case .remaining: "left"
+        case .used: String(localized: "used")
+        case .remaining: String(localized: "left")
         }
     }
 
@@ -648,11 +676,11 @@ enum RefreshIntervalOption: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .oneMinute: "Every minute"
-        case .fiveMinutes: "Every 5 minutes"
-        case .fifteenMinutes: "Every 15 minutes"
-        case .thirtyMinutes: "Every 30 minutes"
-        case .oneHour: "Every hour"
+        case .oneMinute: String(localized: "Every minute")
+        case .fiveMinutes: String(localized: "Every 5 minutes")
+        case .fifteenMinutes: String(localized: "Every 15 minutes")
+        case .thirtyMinutes: String(localized: "Every 30 minutes")
+        case .oneHour: String(localized: "Every hour")
         }
     }
 

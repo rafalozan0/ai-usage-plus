@@ -44,9 +44,10 @@ struct DashboardView: View {
 
                 Group {
                     if let updated = store.lastSuccessfulRefreshAt {
-                        HStack(spacing: 3) {
-                            Text("Updated")
-                            Text(updated, style: .relative)
+                        // Minute precision. A per-second relative date keeps
+                        // redrawing while the closed panel waits for reuse.
+                        TimelineView(.everyMinute) { context in
+                            Text(Self.updatedText(updated, now: context.date))
                         }
                     } else if store.lastAttemptAt != nil {
                         Text("Not updated")
@@ -101,6 +102,12 @@ struct DashboardView: View {
         .padding(.bottom, 7)
     }
 
+    static func updatedText(_ date: Date, now: Date) -> String {
+        guard now.timeIntervalSince(date) >= 60 else { return String(localized: "Updated just now") }
+        let elapsed = date.formatted(.relative(presentation: .numeric, unitsStyle: .abbreviated))
+        return String(localized: "Updated \(elapsed)")
+    }
+
     private var freshnessSymbol: String {
         store.lastSuccessfulRefreshAt == nil ? "clock" : "checkmark.circle.fill"
     }
@@ -150,26 +157,34 @@ struct DashboardContentView: View {
     @Binding var usageDisplayMode: UsageDisplayMode
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 0) {
             header
+                .padding(.horizontal, 10)
             providerRows
         }
-        .padding([.horizontal, .top], 10)
-        .padding(.bottom, 6)
+        .padding(.top, 10)
     }
 
     @ViewBuilder
     private var providerRows: some View {
         if visibleProviders.count > 2 {
+            // Span the panel's full width and pad inside the scroll view, so
+            // its clip never cuts through the cards' glass shadows and leaves
+            // a hard-edged dark band beside them.
             ScrollView {
                 providerRowsContent
+                    .padding(Self.rowsInsets)
             }
             .frame(maxHeight: 390)
             .scrollIndicators(.hidden)
+            .scrollEdgeEffectStyle(.soft, for: .vertical)
         } else {
             providerRowsContent
+                .padding(Self.rowsInsets)
         }
     }
+
+    private static let rowsInsets = EdgeInsets(top: 8, leading: 10, bottom: 6, trailing: 10)
 
     private var providerRowsContent: some View {
         LazyVStack(spacing: 8) {

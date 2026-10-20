@@ -10,6 +10,14 @@ struct WarpAuth: Equatable, Sendable {
         self.refreshToken = refreshToken
         self.service = service
     }
+
+    /// Stays the same when Warp rotates its ID token, and changes when a
+    /// different account signs in.
+    var account: String {
+        let claims = ProviderParsing.jwtClaims(accessToken)
+        let user = ProviderParsing.string(claims?["user_id"]) ?? ProviderParsing.string(claims?["sub"])
+        return "\(service)/\(user ?? refreshToken)"
+    }
 }
 
 struct WarpAuthStore: Sendable {
@@ -30,7 +38,8 @@ struct WarpAuthStore: Sendable {
             do {
                 text = try cache.read(service: service, account: "User", interaction: interaction, keychain: keychain)
             } catch KeychainError.interactionRequired {
-                throw ProviderFailure(.keychainPermission, "Allow Keychain access to read your Warp session.")
+                throw ProviderFailure(.keychainPermission,
+                    "Warp's session is in the Keychain. Choose Always Allow so macOS doesn't ask again.")
             } catch {
                 throw ProviderFailure(.storage, "Allow access to the Warp session in the login Keychain, then refresh.")
             }

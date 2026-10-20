@@ -426,11 +426,11 @@ final class MapperTests: XCTestCase {
         XCTAssertEqual(snapshot.provider, .antigravity)
         XCTAssertEqual(
             snapshot.windows.map(\.kind),
-            [.session, .weekly, .argonWeekly, .claudePool, .claudePoolWeekly]
+            [.session, .weekly, .claudePool, .claudePoolWeekly, .argonWeekly]
         )
         XCTAssertEqual(
             snapshot.windows.map(\.usedPercent),
-            [10, 40, 20, 75, 90]
+            [10, 40, 75, 90, 20]
         )
     }
 
@@ -460,11 +460,11 @@ final class MapperTests: XCTestCase {
 
         XCTAssertEqual(
             snapshot.windows.map(\.kind),
-            [.session, .argonWeekly, .claudePool]
+            [.session, .claudePool, .argonWeekly]
         )
         XCTAssertEqual(
             snapshot.windows.map(\.usedPercent),
-            [10, 25, 50]
+            [10, 50, 25]
         )
     }
 

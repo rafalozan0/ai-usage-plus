@@ -32,7 +32,7 @@ actor DroidProvider: UsageProvider {
                 response = try await client.fetchUsage(auth: auth)
             }
             let snapshot = try DroidUsageMapper.map(response: response, now: now)
-            guard try authStore.load() == auth else {
+            guard try authStore.load().account == auth.account else {
                 throw ProviderFailure(.authentication, "Droid login changed. Refresh to load the current account.")
             }
             return snapshot

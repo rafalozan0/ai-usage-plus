@@ -121,7 +121,7 @@ causes at most one refresh and one retry.
 | Provider | Local credential source | First-party usage contract | Mapped metrics |
 | --- | --- | --- | --- |
 | Cursor | Cursor state SQLite database, then `cursor-access-token` and `cursor-refresh-token` Keychain items | `api2.cursor.sh` DashboardService Connect RPCs | Total, Auto, API |
-| Antigravity | Keychain service `gemini`, account `antigravity` | Google Cloud Code quota-summary API, with model-quota fallback (`antigravity/cli/1.3.6` User-Agent) | Gemini session/weekly, Argon weekly, Claude session/weekly |
+| Antigravity | Keychain service `gemini`, account `antigravity` | Google Cloud Code quota-summary API, with model-quota fallback (`antigravity/cli/1.3.6` User-Agent) | Gemini session/weekly, Claude session/weekly, Argon weekly |
 | GitHub Copilot | Copilot editor config, GitHub CLI config, then `gh:github.com` Keychain item | `api.github.com/copilot_internal/user` | Credits, Chat, Completions |
 | Devin | `~/.local/share/devin/credentials.toml`, then Devin state SQLite database | Codeium SeatManagement Connect RPC | Daily, Weekly |
 | Grok | `~/.grok/auth.json` | Grok CLI billing and settings APIs | Weekly |
@@ -190,6 +190,10 @@ stored under the same service are never selected.
   `https://securetoken.googleapis.com/v1/token` with Warp's public Firebase
   application identifier. Derived tokens are cached only in memory and bound
   to the exact local login. The app does not overwrite Warp's Keychain item.
+- After the request, the stored login is read again. Usage is published only
+  if it still belongs to the same account (Firebase `user_id` or `sub` and the
+  Keychain service), so Warp's routine ID-token rotation doesn't discard it,
+  while a sign-out or account switch does.
 
 Sources: Warp's first-party
 [query](https://github.com/warpdotdev/warp/blob/master/crates/graphql/src/api/queries/get_request_limit_info.rs),
@@ -221,12 +225,17 @@ by AI Usage Plus.
 - Maps `limits.standard` and `limits.core` independently. Each pool exposes
   `fiveHour`, `weekly`, and `monthly` with `usedPercent` and `windowEnd`.
   Resetless zero-use windows remain visible. Missing windows are omitted.
+  Standard windows come first, then Core; the card shows each pool as its own
+  row.
 - WorkOS refresh uses
   `POST https://api.workos.com/user_management/authenticate`, form fields
   `grant_type=refresh_token`, `refresh_token`, and Factory's public OAuth
   `client_id`. Rotated tokens are re-encrypted into the original source with
   owner-only permissions. Unknown fields and the selected organization are
-  preserved. A changed credential generation aborts persistence/publication.
+  preserved. A changed credential generation aborts persistence. Usage is
+  published only if the credential source still belongs to the same account
+  (WorkOS `sub`, organization, and file), so the CLI rotating its own tokens
+  mid-request doesn't discard it.
 - Both providers honor HTTP 429 `Retry-After`, including manual refreshes.
 
 Sources: Factory's [individual plan limits](https://docs.factory.ai/pricing/individuals)
@@ -244,6 +253,12 @@ action permits a system dialog. No timed `security` subprocess is used for these
 items. The legacy login Keychain's process-wide interaction flag is serialized
 and restored around native calls; no ACL, Keychain lock setting, or system-wide
 security policy is changed.
+
+Choosing **Always Allow** in that dialog adds AI Usage Plus to the item's
+access list, so later silent reads succeed. Warp and Droid update their items in
+place, which keeps that access list. The entry is tied to the app's code
+signature: release builds share one certificate, while ad hoc local builds
+need the permission granted again after each rebuild.
 
 Secrets are cached only in memory against the item's persistent reference and
 modification date. Refreshes and post-request account checks read unencrypted

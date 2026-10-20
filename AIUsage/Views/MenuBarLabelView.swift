@@ -11,24 +11,27 @@ struct MenuBarPresentation: Equatable, Sendable {
         switch reading.value {
         case .percentage(let percent):
             valueText = "\(Int(percent.rounded()))%"
-            let value =
-                "\(Int(percent.rounded())) percent \(reading.displayMode.valueSuffix)"
+            let value = String(
+                localized: "\(Int(percent.rounded())) percent \(reading.displayMode.valueSuffix)"
+            )
             accessibilityLabel = reading.isStale
-                ? "\(subject) \(value), stale"
+                ? String(localized: "\(subject) \(value), stale")
                 : "\(subject) \(value)"
         case let .money(amount, currencyCode):
             let formatted = Self.currency(amount, code: currencyCode)
             valueText = formatted
-            let qualifier = reading.displayMode == .used ? "spent" : "left"
+            let qualifier = reading.displayMode == .used
+                ? String(localized: "spent")
+                : String(localized: "left")
             accessibilityLabel = reading.isStale
-                ? "\(subject) \(formatted) \(qualifier), stale"
+                ? String(localized: "\(subject) \(formatted) \(qualifier), stale")
                 : "\(subject) \(formatted) \(qualifier)"
         case let .credits(remaining, usdValue):
             let formatted = Self.currency(usdValue, code: "USD")
             valueText = formatted
-            let detail = "\(remaining) credits left, worth \(formatted)"
+            let detail = String(localized: "\(remaining) credits left, worth \(formatted)")
             accessibilityLabel = reading.isStale
-                ? "\(subject) \(detail), stale"
+                ? String(localized: "\(subject) \(detail), stale")
                 : "\(subject) \(detail)"
         }
         showsStaleIndicator = reading.isStale
@@ -53,7 +56,7 @@ struct MenuBarReadingsPresentation: Equatable, Sendable {
     init(readings: [MenuBarReading]) {
         items = readings.map(MenuBarPresentation.init(reading:))
         accessibilityLabel = items.isEmpty
-            ? "AI usage"
+            ? String(localized: "AI usage")
             : items.map(\.accessibilityLabel).joined(separator: ", ")
     }
 
@@ -62,12 +65,12 @@ struct MenuBarReadingsPresentation: Equatable, Sendable {
             .flatMap(\.readings)
             .map(MenuBarPresentation.init(reading:))
         guard !groups.isEmpty else {
-            accessibilityLabel = "AI usage"
+            accessibilityLabel = String(localized: "AI usage")
             return
         }
         accessibilityLabel = groups.map { group in
             if group.readings.isEmpty {
-                return "\(group.provider.displayName), no usage data"
+                return String(localized: "\(group.provider.displayName), no usage data")
             }
             return group.readings
                 .map(MenuBarPresentation.init(reading:))

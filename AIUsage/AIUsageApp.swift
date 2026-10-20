@@ -69,7 +69,7 @@ final class AIUsageAppDelegate: NSObject, NSApplicationDelegate {
         let appMenu = NSMenu(title: "AI Usage Plus")
 
         let settingsItem = NSMenuItem(
-            title: "Settings…",
+            title: String(localized: "Settings…"),
             action: #selector(openSettings(_:)),
             keyEquivalent: ","
         )
@@ -77,7 +77,7 @@ final class AIUsageAppDelegate: NSObject, NSApplicationDelegate {
         appMenu.addItem(settingsItem)
         appMenu.addItem(.separator())
         let quitItem = NSMenuItem(
-            title: "Quit AI Usage Plus",
+            title: String(localized: "Quit AI Usage Plus"),
             action: #selector(NSApplication.terminate(_:)),
             keyEquivalent: "q"
         )

@@ -143,15 +143,19 @@ enum ProviderParsing {
     }
 
     static func jwtExpiration(_ token: String) -> Date? {
+        guard let expiration = double(jwtClaims(token)?["exp"]) else { return nil }
+        return Date(timeIntervalSince1970: expiration)
+    }
+
+    /// The unverified payload, used only to read local metadata such as the
+    /// expiry or the account a token belongs to.
+    static func jwtClaims(_ token: String) -> [String: Any]? {
         let segments = token.split(separator: ".", omittingEmptySubsequences: false)
         guard segments.count > 1,
-              let payload = base64URLData(String(segments[1])),
-              let object = try? JSONSerialization.jsonObject(with: payload) as? [String: Any],
-              let expiration = double(object["exp"])
-        else {
+              let payload = base64URLData(String(segments[1])) else {
             return nil
         }
-        return Date(timeIntervalSince1970: expiration)
+        return try? JSONSerialization.jsonObject(with: payload) as? [String: Any]
     }
 
     static func base64URLData(_ value: String) -> Data? {

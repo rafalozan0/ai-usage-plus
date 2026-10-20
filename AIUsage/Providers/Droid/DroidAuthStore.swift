@@ -10,6 +10,13 @@ struct DroidAuth: Equatable, Sendable {
     let encryptedText: String
     let key: Data
     let document: Data
+
+    /// Stays the same when Droid rotates its tokens, and changes when a
+    /// different user or organization signs in.
+    var account: String {
+        let user = ProviderParsing.string(ProviderParsing.jwtClaims(accessToken)?["sub"]) ?? refreshToken
+        return "\(path)/\(organizationID ?? "")/\(user)"
+    }
 }
 
 struct DroidAuthStore: Sendable {
@@ -41,7 +48,8 @@ struct DroidAuthStore: Sendable {
                     encodedKey = try cache.read(service: "Factory CLI", account: account,
                                                interaction: interaction, keychain: keychain)
                 } catch KeychainError.interactionRequired {
-                    throw ProviderFailure(.keychainPermission, "Allow Keychain access to read your Droid session.")
+                    throw ProviderFailure(.keychainPermission,
+                        "Droid's session is in the Keychain. Choose Always Allow so macOS doesn't ask again.")
                 } catch {
                     throw ProviderFailure(.storage, "Droid credentials could not be read from the login Keychain.")
                 }

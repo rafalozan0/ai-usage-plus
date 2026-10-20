@@ -201,9 +201,10 @@ func encodedJSON<T: Encodable>(_ value: T) -> String {
     String(data: try! JSONEncoder().encode(value), encoding: .utf8)!
 }
 
-func jwt(expiration: TimeInterval) -> String {
+func jwt(expiration: TimeInterval, subject: String? = nil) -> String {
     let header = Data(#"{"alg":"none"}"#.utf8).base64URLEncoded
-    let payload = Data(#"{"exp":\#(expiration)}"#.utf8).base64URLEncoded
+    let claims = subject.map { #","sub":"\#($0)""# } ?? ""
+    let payload = Data(#"{"exp":\#(expiration)\#(claims)}"#.utf8).base64URLEncoded
     return "\(header).\(payload).signature"
 }
 

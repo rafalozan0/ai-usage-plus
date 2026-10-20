@@ -1,0 +1,2397 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ %@ %@, stale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@, stale"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@ %@, desactualizado"
+          }
+        }
+      }
+    },
+    "%@ %@, %@ monthly limit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@, %3$@ monthly limit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, límite mensual de %3$@"
+          }
+        }
+      }
+    },
+    "%@ %@, stale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@, stale"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@, desactualizado"
+          }
+        }
+      }
+    },
+    "%@ Codex credits remaining, worth %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Codex credits remaining, worth %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ créditos de Codex restantes, equivalen a %2$@"
+          }
+        }
+      }
+    },
+    "%@ balance remaining" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de saldo restante"
+          }
+        }
+      }
+    },
+    "%@ could not be refreshed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo actualizar %@."
+          }
+        }
+      }
+    },
+    "%@ is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "%@ left" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ restante"
+          }
+        }
+      }
+    },
+    "%@ session expired. Run `%@`." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ session expired. Run `%2$@`."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de %1$@ expiró. Ejecuta `%2$@`."
+          }
+        }
+      }
+    },
+    "%@ spent" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ gastado"
+          }
+        }
+      }
+    },
+    "%@ spent, no monthly limit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ gastado, sin límite mensual"
+          }
+        }
+      }
+    },
+    "%@ usage request failed (%lld)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ usage request failed (%2$lld)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de %1$@ (%2$lld)."
+          }
+        }
+      }
+    },
+    "%@ · %@ credits left" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@ credits left"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@ créditos restantes"
+          }
+        }
+      }
+    },
+    "%@, no usage data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, sin datos de uso"
+          }
+        }
+      }
+    },
+    "%lld credits left, worth %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld credits left, worth %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld créditos restantes, equivalen a %2$@"
+          }
+        }
+      }
+    },
+    "%lld percent %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld percent %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld por ciento %@"
+          }
+        }
+      }
+    },
+    "0.00" : {
+      "shouldTranslate" : false
+    },
+    "AI Usage Plus" : {
+      "shouldTranslate" : false
+    },
+    "AI usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso de IA"
+          }
+        }
+      }
+    },
+    "API Usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso de API"
+          }
+        }
+      }
+    },
+    "API key" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clave de API"
+          }
+        }
+      }
+    },
+    "Add your DeepSeek API key in Settings." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrega tu clave de API de DeepSeek en Configuración."
+          }
+        }
+      }
+    },
+    "All providers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los proveedores"
+          }
+        }
+      }
+    },
+    "Allow Keychain Access…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir acceso al llavero…"
+          }
+        }
+      }
+    },
+    "Allow access to the Warp session in the login Keychain, then refresh." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite el acceso a la sesión de Warp en el llavero de inicio de sesión y actualiza."
+          }
+        }
+      }
+    },
+    "Antigravity could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con Antigravity."
+          }
+        }
+      }
+    },
+    "Antigravity quota response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de cuota de Antigravity cambió."
+          }
+        }
+      }
+    },
+    "Antigravity session expired. Sign in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Antigravity expiró. Vuelve a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Antigravity sign-in could not be read from Keychain." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo leer el inicio de sesión de Antigravity desde el llavero."
+          }
+        }
+      }
+    },
+    "Approval needed in System Settings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se necesita aprobación en Configuración del Sistema"
+          }
+        }
+      }
+    },
+    "Argon Weekly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argon semanal"
+          }
+        }
+      }
+    },
+    "Auto Usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso Auto"
+          }
+        }
+      }
+    },
+    "Auto — Highest usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automático — Mayor uso"
+          }
+        }
+      }
+    },
+    "Back to usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver al uso"
+          }
+        }
+      }
+    },
+    "Balance" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo"
+          }
+        }
+      }
+    },
+    "Balance the usage bar starts from. Press Return to save." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo desde el que empieza la barra de uso. Pulsa Retorno para guardar."
+          }
+        }
+      }
+    },
+    "Chat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat"
+          }
+        }
+      }
+    },
+    "Check for Updates…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar actualizaciones…"
+          }
+        }
+      }
+    },
+    "Checking local login…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprobando el inicio de sesión local…"
+          }
+        }
+      }
+    },
+    "Checking…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprobando…"
+          }
+        }
+      }
+    },
+    "Choose what to track and what appears in the menu bar." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige qué seguir y qué aparece en la barra de menús."
+          }
+        }
+      }
+    },
+    "Choose whether percentages show usage left or used" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige si los porcentajes muestran el uso restante o el usado"
+          }
+        }
+      }
+    },
+    "Claude" : {
+      "shouldTranslate" : false
+    },
+    "Claude Code" : {
+      "shouldTranslate" : false
+    },
+    "Claude Weekly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude semanal"
+          }
+        }
+      }
+    },
+    "Claude could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con Claude."
+          }
+        }
+      }
+    },
+    "Claude credentials could not be encoded." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron codificar las credenciales de Claude."
+          }
+        }
+      }
+    },
+    "Claude is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "Claude returned an empty refreshed token." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude devolvió un token renovado vacío."
+          }
+        }
+      }
+    },
+    "Claude returned an invalid refreshed token." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude devolvió un token renovado no válido."
+          }
+        }
+      }
+    },
+    "Claude session expired." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Claude expiró."
+          }
+        }
+      }
+    },
+    "Claude token is missing. Run `claude` to log in." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta el token de Claude. Ejecuta `claude` para iniciar sesión."
+          }
+        }
+      }
+    },
+    "Claude token refresh failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la renovación del token de Claude (%lld)."
+          }
+        }
+      }
+    },
+    "Claude usage request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de Claude (%lld)."
+          }
+        }
+      }
+    },
+    "Claude's refreshed login could not be saved." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo guardar el inicio de sesión renovado de Claude."
+          }
+        }
+      }
+    },
+    "Codex" : {
+      "shouldTranslate" : false
+    },
+    "Codex could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con Codex."
+          }
+        }
+      }
+    },
+    "Codex credentials could not be encoded." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron codificar las credenciales de Codex."
+          }
+        }
+      }
+    },
+    "Codex is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "Codex login changed during refresh. Refresh again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El inicio de sesión de Codex cambió durante la actualización. Vuelve a actualizar."
+          }
+        }
+      }
+    },
+    "Codex returned an invalid refreshed token." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex devolvió un token renovado no válido."
+          }
+        }
+      }
+    },
+    "Codex token refresh failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la renovación del token de Codex (%lld)."
+          }
+        }
+      }
+    },
+    "Codex usage request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de Codex (%lld)."
+          }
+        }
+      }
+    },
+    "Codex's refreshed login could not be saved." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo guardar el inicio de sesión renovado de Codex."
+          }
+        }
+      }
+    },
+    "Completions" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizaciones"
+          }
+        }
+      }
+    },
+    "Connected" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectado"
+          }
+        }
+      }
+    },
+    "Copilot usage data is unavailable for this account." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los datos de uso de Copilot no están disponibles para esta cuenta."
+          }
+        }
+      }
+    },
+    "Copilot usage request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de Copilot (%lld)."
+          }
+        }
+      }
+    },
+    "Core Monthly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Core mensual"
+          }
+        }
+      }
+    },
+    "Core Session" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesión Core"
+          }
+        }
+      }
+    },
+    "Core Weekly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Core semanal"
+          }
+        }
+      }
+    },
+    "Credits" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créditos"
+          }
+        }
+      }
+    },
+    "Cursor could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con Cursor."
+          }
+        }
+      }
+    },
+    "Cursor could not refresh its session." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cursor no pudo renovar su sesión."
+          }
+        }
+      }
+    },
+    "Cursor is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cursor alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "Cursor quota response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de cuota de Cursor cambió."
+          }
+        }
+      }
+    },
+    "Cursor session could not be saved." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo guardar la sesión de Cursor."
+          }
+        }
+      }
+    },
+    "Cursor session expired. Sign in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Cursor expiró. Vuelve a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Cursor usage request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de Cursor (%lld)."
+          }
+        }
+      }
+    },
+    "Daily" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diario"
+          }
+        }
+      }
+    },
+    "DeepSeek" : {
+      "shouldTranslate" : false
+    },
+    "DeepSeek balance request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de saldo de DeepSeek (%lld)."
+          }
+        }
+      }
+    },
+    "DeepSeek balance response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de saldo de DeepSeek cambió."
+          }
+        }
+      }
+    },
+    "DeepSeek could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con DeepSeek."
+          }
+        }
+      }
+    },
+    "DeepSeek rejected the API key. Update it in Settings." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DeepSeek rechazó la clave de API. Actualízala en Configuración."
+          }
+        }
+      }
+    },
+    "Devin could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con Devin."
+          }
+        }
+      }
+    },
+    "Devin quota data is unavailable." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los datos de cuota de Devin no están disponibles."
+          }
+        }
+      }
+    },
+    "Devin quota response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de cuota de Devin cambió."
+          }
+        }
+      }
+    },
+    "Devin server configuration is invalid." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La configuración del servidor de Devin no es válida."
+          }
+        }
+      }
+    },
+    "Devin session expired. Run `devin auth login`." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Devin expiró. Ejecuta `devin auth login`."
+          }
+        }
+      }
+    },
+    "Devin usage request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de Devin (%lld)."
+          }
+        }
+      }
+    },
+    "Droid credentials could not be decrypted. Sign in to Droid again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron descifrar las credenciales de Droid. Vuelve a iniciar sesión en Droid."
+          }
+        }
+      }
+    },
+    "Droid credentials could not be read from the login Keychain." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron leer las credenciales de Droid del llavero de inicio de sesión."
+          }
+        }
+      }
+    },
+    "Droid is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Droid alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "Droid isn't reporting Standard Usage limits." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Droid no está informando los límites de uso estándar."
+          }
+        }
+      }
+    },
+    "Droid login changed. Refresh to load the current account." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El inicio de sesión de Droid cambió. Actualiza para cargar la cuenta actual."
+          }
+        }
+      }
+    },
+    "Droid quota response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de cuota de Droid cambió."
+          }
+        }
+      }
+    },
+    "Droid refreshed credentials could not be saved." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron guardar las credenciales renovadas de Droid."
+          }
+        }
+      }
+    },
+    "Droid returned an invalid session refresh." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Droid devolvió una renovación de sesión no válida."
+          }
+        }
+      }
+    },
+    "Droid returned an unreadable %@ limit." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Droid devolvió un límite %@ ilegible."
+          }
+        }
+      }
+    },
+    "Droid returned an unreadable reset time." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Droid devolvió una hora de reinicio ilegible."
+          }
+        }
+      }
+    },
+    "Droid session expired. Run `droid` and sign in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Droid expiró. Ejecuta `droid` y vuelve a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Droid session is incomplete. Run `droid` and sign in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Droid está incompleta. Ejecuta `droid` y vuelve a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Droid's session is in the Keychain. Choose Always Allow so macOS doesn't ask again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Droid está en el llavero. Elige «Permitir siempre» para que macOS no vuelva a preguntar."
+          }
+        }
+      }
+    },
+    "Enter a DeepSeek API key." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingresa una clave de API de DeepSeek."
+          }
+        }
+      }
+    },
+    "Every 15 minutes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada 15 minutos"
+          }
+        }
+      }
+    },
+    "Every 30 minutes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada 30 minutos"
+          }
+        }
+      }
+    },
+    "Every 5 minutes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada 5 minutos"
+          }
+        }
+      }
+    },
+    "Every hour" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada hora"
+          }
+        }
+      }
+    },
+    "Every minute" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada minuto"
+          }
+        }
+      }
+    },
+    "Extra Usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso extra"
+          }
+        }
+      }
+    },
+    "Extra usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso extra"
+          }
+        }
+      }
+    },
+    "Fable" : {
+      "shouldTranslate" : false
+    },
+    "General" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "GitHub Copilot could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con GitHub Copilot."
+          }
+        }
+      }
+    },
+    "GitHub Copilot is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub Copilot alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "GitHub token expired. Run `gh auth login` again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El token de GitHub expiró. Vuelve a ejecutar `gh auth login`."
+          }
+        }
+      }
+    },
+    "Grok could not be reached." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con Grok."
+          }
+        }
+      }
+    },
+    "Grok credentials could not be encoded." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron codificar las credenciales de Grok."
+          }
+        }
+      }
+    },
+    "Grok credentials could not be updated." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron actualizar las credenciales de Grok."
+          }
+        }
+      }
+    },
+    "Grok quota response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de cuota de Grok cambió."
+          }
+        }
+      }
+    },
+    "Grok session expired. Run `grok login`." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Grok expiró. Ejecuta `grok login`."
+          }
+        }
+      }
+    },
+    "Grok usage request failed (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló la solicitud de uso de Grok (%lld)."
+          }
+        }
+      }
+    },
+    "Grok weekly quota is unavailable for this account." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La cuota semanal de Grok no está disponible para esta cuenta."
+          }
+        }
+      }
+    },
+    "Hide %@ for %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide %1$@ for %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar %1$@ de %2$@"
+          }
+        }
+      }
+    },
+    "Hide %@ from the menu bar" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar %@ de la barra de menús"
+          }
+        }
+      }
+    },
+    "Included credits · shared with Warp CLI" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créditos incluidos · compartidos con Warp CLI"
+          }
+        }
+      }
+    },
+    "Included usage · shared with Warp CLI" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso incluido · compartido con Warp CLI"
+          }
+        }
+      }
+    },
+    "Invalid Droid credential format." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El formato de las credenciales de Droid no es válido."
+          }
+        }
+      }
+    },
+    "Keychain access could not be authorized." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo autorizar el acceso al llavero."
+          }
+        }
+      }
+    },
+    "Keychain access needs your permission." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El acceso al llavero necesita tu permiso."
+          }
+        }
+      }
+    },
+    "Keychain could not be read." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo leer el llavero."
+          }
+        }
+      }
+    },
+    "Keychain could not be updated." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo actualizar el llavero."
+          }
+        }
+      }
+    },
+    "Keychain permission needed" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se necesita permiso del llavero"
+          }
+        }
+      }
+    },
+    "Launch at Login" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir al iniciar sesión"
+          }
+        }
+      }
+    },
+    "Launch at Login could not be disabled." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo desactivar la apertura al iniciar sesión."
+          }
+        }
+      }
+    },
+    "Launch at Login could not be enabled." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo activar la apertura al iniciar sesión."
+          }
+        }
+      }
+    },
+    "Launch at Login is unavailable for this build." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La apertura al iniciar sesión no está disponible en esta compilación."
+          }
+        }
+      }
+    },
+    "Left" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restante"
+          }
+        }
+      }
+    },
+    "Loading available metrics…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando métricas disponibles…"
+          }
+        }
+      }
+    },
+    "Local provider state could not be updated." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo actualizar el estado local del proveedor."
+          }
+        }
+      }
+    },
+    "Log in to choose metrics" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia sesión para elegir métricas"
+          }
+        }
+      }
+    },
+    "Menu Bar" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Barra de menús"
+          }
+        }
+      }
+    },
+    "Monthly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mensual"
+          }
+        }
+      }
+    },
+    "No active Cursor subscription." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay una suscripción activa de Cursor."
+          }
+        }
+      }
+    },
+    "No quota data yet." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay datos de cuota."
+          }
+        }
+      }
+    },
+    "No usage metrics returned" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se devolvieron métricas de uso"
+          }
+        }
+      }
+    },
+    "Not installed" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No instalado"
+          }
+        }
+      }
+    },
+    "Not logged in" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin sesión iniciada"
+          }
+        }
+      }
+    },
+    "Not logged in. Run `claude` to authenticate." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Ejecuta `claude` para autenticarte."
+          }
+        }
+      }
+    },
+    "Not logged in. Run `codex` to authenticate." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Ejecuta `codex` para autenticarte."
+          }
+        }
+      }
+    },
+    "Not logged in. Run `devin auth login`." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Ejecuta `devin auth login`."
+          }
+        }
+      }
+    },
+    "Not logged in. Run `droid` and sign in first." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Ejecuta `droid` e inicia sesión primero."
+          }
+        }
+      }
+    },
+    "Not logged in. Run `grok login`." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Ejecuta `grok login`."
+          }
+        }
+      }
+    },
+    "Not logged in. Sign in through Antigravity." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Inicia sesión desde Antigravity."
+          }
+        }
+      }
+    },
+    "Not logged in. Sign in through Cursor." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Inicia sesión desde Cursor."
+          }
+        }
+      }
+    },
+    "Not logged in. Sign in to GitHub Copilot or run `gh auth login`." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Inicia sesión en GitHub Copilot o ejecuta `gh auth login`."
+          }
+        }
+      }
+    },
+    "Not logged in. Sign in to Warp first." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión. Inicia sesión en Warp primero."
+          }
+        }
+      }
+    },
+    "Not updated" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin actualizar"
+          }
+        }
+      }
+    },
+    "Numbers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Números"
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivado"
+          }
+        }
+      }
+    },
+    "Plan %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan %@"
+          }
+        }
+      }
+    },
+    "Provider" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proveedor"
+          }
+        }
+      }
+    },
+    "Providers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proveedores"
+          }
+        }
+      }
+    },
+    "Quit AI Usage Plus" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salir de AI Usage Plus"
+          }
+        }
+      }
+    },
+    "Rate limited" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Límite de solicitudes"
+          }
+        }
+      }
+    },
+    "Re-login for live usage. Run `claude` and sign in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuelve a iniciar sesión para ver el uso en vivo. Ejecuta `claude` e inicia sesión otra vez."
+          }
+        }
+      }
+    },
+    "Refresh" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar"
+          }
+        }
+      }
+    },
+    "Refresh now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar ahora"
+          }
+        }
+      }
+    },
+    "Refreshing usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizando el uso"
+          }
+        }
+      }
+    },
+    "Remove" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar"
+          }
+        }
+      }
+    },
+    "Reset %lldd" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicio %lldd"
+          }
+        }
+      }
+    },
+    "Reset %lldd %lldh" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reset %1$lldd %2$lldh"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicio %1$lldd %2$lldh"
+          }
+        }
+      }
+    },
+    "Reset %lldh %lldm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reset %1$lldh %2$lldm"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicio %1$lldh %2$lldm"
+          }
+        }
+      }
+    },
+    "Reset %lldm" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicio %lldm"
+          }
+        }
+      }
+    },
+    "Resetting" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciando"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintento"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar"
+          }
+        }
+      }
+    },
+    "Saved" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardado"
+          }
+        }
+      }
+    },
+    "Session" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesión"
+          }
+        }
+      }
+    },
+    "Session expired. Run `claude` to log in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión expiró. Ejecuta `claude` para volver a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Session expired. Run `codex` to log in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión expiró. Ejecuta `codex` para volver a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuración"
+          }
+        }
+      }
+    },
+    "Settings…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuración…"
+          }
+        }
+      }
+    },
+    "Show %@ for %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show %1$@ for %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar %1$@ de %2$@"
+          }
+        }
+      }
+    },
+    "Show %@ in Menu Bar" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar %@ en la barra de menús"
+          }
+        }
+      }
+    },
+    "Show %@ in the menu bar" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar %@ en la barra de menús"
+          }
+        }
+      }
+    },
+    "Showing last update" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrando la última actualización"
+          }
+        }
+      }
+    },
+    "Shows settings in the menu bar panel" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra la configuración en el panel de la barra de menús"
+          }
+        }
+      }
+    },
+    "Shows the usage dashboard" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra el panel de uso"
+          }
+        }
+      }
+    },
+    "Shows your DeepSeek API balance. The key is stored in your Keychain." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra el saldo de tu API de DeepSeek. La clave se guarda en tu llavero."
+          }
+        }
+      }
+    },
+    "Sonnet" : {
+      "shouldTranslate" : false
+    },
+    "Spark" : {
+      "shouldTranslate" : false
+    },
+    "Spark Weekly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spark semanal"
+          }
+        }
+      }
+    },
+    "Star on GitHub" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dar estrella en GitHub"
+          }
+        }
+      }
+    },
+    "Start $" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicial $"
+          }
+        }
+      }
+    },
+    "Startup" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicio"
+          }
+        }
+      }
+    },
+    "Temporarily unavailable" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No disponible temporalmente"
+          }
+        }
+      }
+    },
+    "The local login changed. Refresh to load the current session." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El inicio de sesión local cambió. Actualiza para cargar la sesión actual."
+          }
+        }
+      }
+    },
+    "The server returned an invalid response." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El servidor devolvió una respuesta no válida."
+          }
+        }
+      }
+    },
+    "The server returned unreadable usage data." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El servidor devolvió datos de uso ilegibles."
+          }
+        }
+      }
+    },
+    "Token conflict. Run `codex` to log in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conflicto de token. Ejecuta `codex` para volver a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Token expired. Run `claude` to log in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El token expiró. Ejecuta `claude` para volver a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Token expired. Run `codex` to log in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El token expiró. Ejecuta `codex` para volver a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Token revoked. Run `codex` to log in again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El token fue revocado. Ejecuta `codex` para volver a iniciar sesión."
+          }
+        }
+      }
+    },
+    "Total Usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso total"
+          }
+        }
+      }
+    },
+    "Track" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir"
+          }
+        }
+      }
+    },
+    "Track %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir %@"
+          }
+        }
+      }
+    },
+    "Two Weeks" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quincenal"
+          }
+        }
+      }
+    },
+    "Unlimited included usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso incluido ilimitado"
+          }
+        }
+      }
+    },
+    "Unlock the login Keychain to read the Droid session." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquea el llavero de inicio de sesión para leer la sesión de Droid."
+          }
+        }
+      }
+    },
+    "Update" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar"
+          }
+        }
+      }
+    },
+    "Update AI Usage Plus to %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar AI Usage Plus a %@"
+          }
+        }
+      }
+    },
+    "Updated %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizado %@"
+          }
+        }
+      }
+    },
+    "Updated just now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizado justo ahora"
+          }
+        }
+      }
+    },
+    "Usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso"
+          }
+        }
+      }
+    },
+    "Usage not available for API key." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El uso no está disponible con una clave de API."
+          }
+        }
+      }
+    },
+    "Usage numbers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Números de uso"
+          }
+        }
+      }
+    },
+    "Used" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usado"
+          }
+        }
+      }
+    },
+    "Waiting for usage" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando el uso"
+          }
+        }
+      }
+    },
+    "Waiting to refresh" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando para actualizar"
+          }
+        }
+      }
+    },
+    "Warp is rate limited. Try again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warp alcanzó el límite de solicitudes. Inténtalo más tarde."
+          }
+        }
+      }
+    },
+    "Warp isn't reporting a finite included allowance." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warp no está informando una asignación incluida finita."
+          }
+        }
+      }
+    },
+    "Warp login changed. Refresh to load the current account." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El inicio de sesión de Warp cambió. Actualiza para cargar la cuenta actual."
+          }
+        }
+      }
+    },
+    "Warp quota response changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La respuesta de cuota de Warp cambió."
+          }
+        }
+      }
+    },
+    "Warp returned an invalid session refresh." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warp devolvió una renovación de sesión no válida."
+          }
+        }
+      }
+    },
+    "Warp returned an unknown quota period." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warp devolvió un periodo de cuota desconocido."
+          }
+        }
+      }
+    },
+    "Warp session expired. Sign in to Warp again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Warp expiró. Vuelve a iniciar sesión en Warp."
+          }
+        }
+      }
+    },
+    "Warp session is incomplete. Sign in to Warp again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Warp está incompleta. Vuelve a iniciar sesión en Warp."
+          }
+        }
+      }
+    },
+    "Warp's session is in the Keychain. Choose Always Allow so macOS doesn't ask again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sesión de Warp está en el llavero. Elige «Permitir siempre» para que macOS no vuelva a preguntar."
+          }
+        }
+      }
+    },
+    "Weekly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semanal"
+          }
+        }
+      }
+    },
+    "X Subscription pool, shared with Cursor" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolsa de The X Subscription, compartida con Cursor"
+          }
+        }
+      }
+    },
+    "X Subscription pool, shared with Grok" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolsa de The X Subscription, compartida con Grok"
+          }
+        }
+      }
+    },
+    "left" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "restante"
+          }
+        }
+      }
+    },
+    "spent" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gastado"
+          }
+        }
+      }
+    },
+    "used" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "usado"
+          }
+        }
+      }
+    },
+    "xAI isn't reporting Grok usage right now (%lld)." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "xAI no está informando el uso de Grok en este momento (%lld)."
+          }
+        }
+      }
+    },
+    "·" : {
+      "shouldTranslate" : false
+    },
+    "⚠︎" : {
+      "shouldTranslate" : false
+    }
+  },
+  "version" : "1.0"
+}

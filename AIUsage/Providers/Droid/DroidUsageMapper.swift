@@ -15,7 +15,7 @@ enum DroidUsageMapper {
         let core = ProviderParsing.object(limits["core"])
         let coreWindows = try core.map { try windows($0, kinds: [.coreSession, .coreWeekly, .coreMonthly]) } ?? []
         return ProviderSnapshot(provider: .droid, planName: nil, windows: standardWindows + coreWindows,
-                                note: "Standard Usage and Droid Core have separate limits.", fetchedAt: now)
+                                fetchedAt: now)
     }
 
     private static func windows(_ pool: [String: Any], kinds: [QuotaKind]) throws -> [QuotaWindow] {

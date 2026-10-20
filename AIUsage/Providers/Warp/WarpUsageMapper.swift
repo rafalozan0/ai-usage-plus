@@ -13,7 +13,7 @@ enum WarpUsageMapper {
         }
         if limit["isUnlimited"] as? Bool == true {
             return ProviderSnapshot(provider: .warp, planName: nil, windows: [],
-                                    note: "Unlimited included usage", fetchedAt: now)
+                                    note: String(localized: "Unlimited included usage"), fetchedAt: now)
         }
         let kind: QuotaKind
         switch ProviderParsing.string(limit["requestLimitRefreshDuration"]) {
@@ -36,8 +36,8 @@ enum WarpUsageMapper {
             provider: .warp, planName: nil,
             windows: [QuotaWindow(kind: kind, usedPercent: used / total * 100,
                                   resetsAt: ProviderParsing.date(limit["nextRefreshTime"]))],
-            note: usesDollars ? "Included usage · shared with Warp CLI"
-                : "Included credits · shared with Warp CLI",
+            note: usesDollars ? String(localized: "Included usage · shared with Warp CLI")
+                : String(localized: "Included credits · shared with Warp CLI"),
             fetchedAt: now
         )
     }

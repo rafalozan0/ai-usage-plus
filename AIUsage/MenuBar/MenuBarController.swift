@@ -255,6 +255,11 @@ enum MenuBarPanelRoute: Equatable {
 
 @MainActor
 final class MenuBarController: NSObject, NSPopoverDelegate {
+    /// How long a closed dashboard stays built. Reopening it within this time
+    /// skips rebuilding the SwiftUI hierarchy, which otherwise lands in the
+    /// first frames of the opening animation.
+    static let panelReuseInterval: Duration = .seconds(90)
+
     private let store: UsageStore
     private let preferences: AppPreferences
     private let launchAtLogin: LaunchAtLoginController
@@ -267,6 +272,7 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
     private var panelRoute: MenuBarPanelRoute = .dashboard
     private var isStarted = false
     private var toggleGate = PanelToggleGate()
+    private var panelReleaseTask: Task<Void, Never>?
 
     init(
         store: UsageStore,
@@ -349,16 +355,31 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
             return
         }
 
-        let popover = NSPopover()
-        popover.behavior = .transient
-        popover.animates = true
-        popover.delegate = self
-        self.popover = popover
+        panelReleaseTask?.cancel()
+        panelReleaseTask = nil
 
         // Status-item clicks do not activate an LSUIElement app automatically.
         // Activate first so Liquid Glass resolves its active appearance.
         application.activate()
-        installContent(for: route, in: popover)
+
+        let popover: NSPopover
+        if let reusable = self.popover {
+            popover = reusable
+            if panelRoute == route,
+               let content = popover.contentViewController as? NSHostingController<AnyView> {
+                // Providers may have appeared or changed while it was hidden.
+                popover.contentSize = measuredContentSize(of: content, for: route)
+            } else {
+                installContent(for: route, in: popover)
+            }
+        } else {
+            popover = NSPopover()
+            popover.behavior = .transient
+            popover.animates = true
+            popover.delegate = self
+            self.popover = popover
+            installContent(for: route, in: popover)
+        }
         popover.show(
             relativeTo: button.bounds,
             of: button,
@@ -402,20 +423,27 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
         let hostingController = NSHostingController(rootView: rootView)
         hostingController.sizingOptions = [.preferredContentSize]
 
-        let measuredSize = hostingController.sizeThatFits(
+        let contentSize = measuredContentSize(of: hostingController, for: route)
+        hostingController.preferredContentSize = contentSize
+        popover.contentViewController = hostingController
+        popover.contentSize = contentSize
+        panelRoute = route
+    }
+
+    private func measuredContentSize(
+        of controller: NSHostingController<AnyView>,
+        for route: MenuBarPanelRoute
+    ) -> NSSize {
+        let measuredSize = controller.sizeThatFits(
             in: NSSize(
                 width: route.width,
                 height: .greatestFiniteMagnitude
             )
         )
-        let contentSize = NSSize(
+        return NSSize(
             width: route.width,
             height: ceil(measuredSize.height)
         )
-        hostingController.preferredContentSize = contentSize
-        popover.contentViewController = hostingController
-        popover.contentSize = contentSize
-        panelRoute = route
     }
 
     func popoverDidClose(_ notification: Notification) {
@@ -424,13 +452,29 @@ final class MenuBarController: NSObject, NSPopoverDelegate {
             return
         }
         toggleGate.panelDidClose()
-        releasePanel()
+        schedulePanelRelease()
         DispatchQueue.main.async { [weak self] in
             self?.toggleGate.clearSuppression()
         }
     }
 
+    private func schedulePanelRelease() {
+        // Settings are opened rarely; only the dashboard is kept for reuse.
+        guard panelRoute == .dashboard else {
+            releasePanel()
+            return
+        }
+        panelReleaseTask?.cancel()
+        panelReleaseTask = Task { [weak self] in
+            try? await Task.sleep(for: Self.panelReuseInterval)
+            guard !Task.isCancelled else { return }
+            self?.releasePanel()
+        }
+    }
+
     private func releasePanel() {
+        panelReleaseTask?.cancel()
+        panelReleaseTask = nil
         popover?.delegate = nil
         popover?.contentViewController = nil
         popover = nil

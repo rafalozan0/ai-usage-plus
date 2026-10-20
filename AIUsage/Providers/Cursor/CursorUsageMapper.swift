@@ -1,7 +1,7 @@
 import Foundation
 
 enum CursorUsageMapper {
-    static let xSubscriptionNote = "X Subscription pool, shared with Grok"
+    static let xSubscriptionNote = String(localized: "X Subscription pool, shared with Grok")
 
     struct PlanInfo: Equatable {
         let name: String
@@ -24,8 +24,7 @@ enum CursorUsageMapper {
                 usageResponse.statusCode >= 500
                     ? .transient
                     : .invalidResponse,
-                "Cursor usage request failed " +
-                    "(\(usageResponse.statusCode))."
+                "Cursor usage request failed (\(usageResponse.statusCode))."
             )
         }
         let body = try ProviderParsing.object(

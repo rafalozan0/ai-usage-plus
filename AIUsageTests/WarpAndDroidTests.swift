@@ -159,12 +159,65 @@ final class WarpAndDroidTests: XCTestCase {
 
     func testWarpNeverPublishesUsageAfterSignOutDuringTheRequest() async {
         let keychain = warpKeychain(token: jwt(expiration: now.timeIntervalSince1970 + 3600))
-        let http = SignOutDuringUsageClient(keychain: keychain, response: httpResponse(json: warpUsage))
+        let http = KeychainChangeDuringUsageClient(keychain: keychain, value: nil, response: httpResponse(json: warpUsage))
         let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain), client: WarpUsageClient(http: http),
                                    dateProvider: FixedDateProvider(value: now))
         do { _ = try await provider.fetch(); XCTFail("Signed-out usage must not be published") }
         catch let failure as ProviderFailure { XCTAssertEqual(failure.kind, .authentication) }
         catch { XCTFail("Unexpected failure") }
+    }
+
+    func testWarpTokenRotationDuringTheRequestStillPublishesUsage() async throws {
+        let expiry = now.timeIntervalSince1970 + 3600
+        let keychain = warpKeychain(token: jwt(expiration: expiry, subject: "user-a"))
+        let http = KeychainChangeDuringUsageClient(keychain: keychain,
+            value: warpSession(token: jwt(expiration: expiry + 3600, subject: "user-a")),
+            response: httpResponse(json: warpUsage))
+        let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain), client: WarpUsageClient(http: http),
+                                   dateProvider: FixedDateProvider(value: now))
+        let snapshot = try await provider.fetch()
+        XCTAssertEqual(snapshot.window(for: .monthly)?.usedPercent, 25)
+    }
+
+    func testWarpAccountSwitchDuringTheRequestIsNotPublished() async {
+        let expiry = now.timeIntervalSince1970 + 3600
+        let keychain = warpKeychain(token: jwt(expiration: expiry, subject: "user-a"))
+        let http = KeychainChangeDuringUsageClient(keychain: keychain,
+            value: warpSession(token: jwt(expiration: expiry, subject: "user-b")),
+            response: httpResponse(json: warpUsage))
+        let provider = WarpProvider(authStore: WarpAuthStore(keychain: keychain), client: WarpUsageClient(http: http),
+                                   dateProvider: FixedDateProvider(value: now))
+        do { _ = try await provider.fetch(); XCTFail("Another account's usage must not be published") }
+        catch let failure as ProviderFailure { XCTAssertEqual(failure.kind, .authentication) }
+        catch { XCTFail("Unexpected failure") }
+    }
+
+    func testDroidTokenRotationByTheCLIDuringTheRequestStillPublishesUsage() async throws {
+        let expiry = now.timeIntervalSince1970 + 3600
+        let files = try droidFiles(token: jwt(expiration: expiry, subject: "user-a"))
+        let rotated = try DroidAuthStore.encrypt(Data(
+            #"{"access_token":"\#(jwt(expiration: expiry + 3600, subject: "user-a"))","refresh_token":"rotated","active_organization_id":"org-test","region":"eu"}"#.utf8
+        ), key: key)
+        let provider = DroidProvider(authStore: DroidAuthStore(files: files, keychain: MemoryKeychain()),
+            client: DroidUsageClient(http: FileChangeDuringUsageClient(files: files, path: droidPath, text: rotated,
+                                                                      response: httpResponse(json: droidUsage))),
+            dateProvider: FixedDateProvider(value: now))
+        let snapshot = try await provider.fetch()
+        XCTAssertEqual(snapshot.windows.count, 6)
+    }
+
+    func testDroidAccountSwitchDuringTheRequestIsNotPublished() async throws {
+        let expiry = now.timeIntervalSince1970 + 3600
+        let files = try droidFiles(token: jwt(expiration: expiry, subject: "user-a"))
+        let other = try DroidAuthStore.encrypt(Data(
+            #"{"access_token":"\#(jwt(expiration: expiry, subject: "user-b"))","refresh_token":"other","active_organization_id":"org-test"}"#.utf8
+        ), key: key)
+        let provider = DroidProvider(authStore: DroidAuthStore(files: files, keychain: MemoryKeychain()),
+            client: DroidUsageClient(http: FileChangeDuringUsageClient(files: files, path: droidPath, text: other,
+                                                                      response: httpResponse(json: droidUsage))),
+            dateProvider: FixedDateProvider(value: now))
+        do { _ = try await provider.fetch(); XCTFail("Another account's usage must not be published") }
+        catch let failure as ProviderFailure { XCTAssertEqual(failure.kind, .authentication) }
     }
 
     func testWarpCachePrefersANewCLILoginOverACachedDesktopLogin() throws {
@@ -349,23 +402,42 @@ final class WarpAndDroidTests: XCTestCase {
     }
 
     private func warpKeychain(token: String) -> MemoryKeychain {
-        MemoryKeychain(accounts: [WarpAuthStore.service + "/User":
-            #"{"id_token":{"id_token":"\#(token)","refresh_token":"refresh +&"}}"#])
+        MemoryKeychain(accounts: [WarpAuthStore.service + "/User": warpSession(token: token)])
     }
 
-    private func droidFiles() throws -> MemoryFiles {
-        let document = Data(#"{"access_token":"\#(jwt(expiration: now.timeIntervalSince1970 + 3600))","refresh_token":"refresh","active_organization_id":"org-test","region":"eu","future_field":"keep"}"#.utf8)
+    private func warpSession(token: String) -> String {
+        #"{"id_token":{"id_token":"\#(token)","refresh_token":"refresh +&"}}"#
+    }
+
+    private func droidFiles(token: String? = nil) throws -> MemoryFiles {
+        let token = token ?? jwt(expiration: now.timeIntervalSince1970 + 3600)
+        let document = Data(#"{"access_token":"\#(token)","refresh_token":"refresh","active_organization_id":"org-test","region":"eu","future_field":"keep"}"#.utf8)
         return MemoryFiles([droidPath: try DroidAuthStore.encrypt(document, key: key),
                             "~/.factory/auth.v2.key": key.base64EncodedString()])
     }
 }
 
-private struct SignOutDuringUsageClient: HTTPClient {
+/// Replaces Warp's Keychain item while the usage request is in flight.
+private struct KeychainChangeDuringUsageClient: HTTPClient {
     let keychain: MemoryKeychain
+    let value: String?
     let response: HTTPResponse
 
     func send(_ request: HTTPRequest) async throws -> HTTPResponse {
-        keychain.setAccountValue(service: WarpAuthStore.service, account: "User", value: nil)
+        keychain.setAccountValue(service: WarpAuthStore.service, account: "User", value: value)
+        return response
+    }
+}
+
+/// Rewrites Droid's credential file while the usage request is in flight.
+private struct FileChangeDuringUsageClient: HTTPClient {
+    let files: MemoryFiles
+    let path: String
+    let text: String
+    let response: HTTPResponse
+
+    func send(_ request: HTTPRequest) async throws -> HTTPResponse {
+        try files.writeText(path, text)
         return response
     }
 }

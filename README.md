@@ -107,11 +107,23 @@ with a short explanation.
 
 Warp and Droid reuse their existing local sessions. Automatic refreshes never
 open their Keychain permission dialogs. If access is needed, click **Allow
-Keychain Access…** on the provider card to authorize it explicitly. The secret
-is then reused in memory until the CLI changes or removes its Keychain item.
-Droid's encrypted
+Keychain Access…** on the provider card and choose **Always Allow**, so macOS
+doesn't ask again. The secret is then reused in memory, and routine token
+rotations by Warp or Droid don't require another read. Droid's encrypted
 credential file stays encrypted when an expired session is renewed. No API key
 or additional AI Usage Plus login is needed.
+
+> [!TIP]
+> Builds made with `./scripts/install.sh` are signed ad hoc, so macOS treats
+> each rebuild as a new app and **Always Allow** has to be granted once more
+> after reinstalling. Release builds keep the permission across updates.
+
+### Separate pools stay apart
+
+Each card keeps independent allowances on their own rows: Codex Spark,
+Antigravity's Claude and Argon pools, and Droid Core never share a row with
+the main limits. Droid's Standard and Core pools are shown as two aligned rows
+of 5-hour, weekly, and monthly windows.
 
 ### The X Subscription (Grok + Cursor)
 
@@ -135,6 +147,8 @@ pool and show up as Cursor's **API Usage**.
 - Signed update checks at launch and daily, plus **Check for Updates…**
 - A direct **Update** button in the panel when a new version is available
 - Native light and dark appearances with Liquid Glass
+- English and Spanish, following your macOS language. More languages are
+  welcome, see [CONTRIBUTING.md](CONTRIBUTING.md#translations)
 - Launch at Login enabled by default and still user-controllable
 
 ## Other usage apps stay heavy. AI Usage Plus stays light.
@@ -150,8 +164,13 @@ AI Usage Plus started from AI Usage 0.2.1 and adds:
 - **The X Subscription:** shared Grok + Cursor pool, labeled on both cards
 - **DeepSeek:** API balance shown as a bar from your starting balance to zero
 - **Antigravity Argon:** the Argon weekly pool and the current CLI user agent
-- **Fixes:** provider cards no longer overlap the footer while scrolling, the
-  Grok icon is no longer thin and cut off, and text fields accept paste
+- **Warp:** the monthly included allowance shared by the Warp app and CLI
+- **Droid (Factory):** Standard and Droid Core limits, aligned by period
+- **Quiet Keychain access:** Warp and Droid never open permission dialogs on
+  their own; access is granted once from the provider card
+- **Fixes:** provider cards no longer overlap the footer or leave a
+  hard-edged band while scrolling, the Grok icon is no longer thin and cut off,
+  and text fields accept paste
 - **Its own identity:** new icon, bundle identifier
   `com.rafalozan0.aiusageplus`, update feed, and Homebrew tap, so it installs
   next to the original

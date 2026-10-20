@@ -125,10 +125,10 @@ struct BillingUsagePresentation: Equatable {
             switch displayMode {
             case .used:
                 displayedAmount = usedAmount
-                suffix = "spent"
+                suffix = String(localized: "spent")
             case .remaining:
                 displayedAmount = max(limitAmount - usedAmount, 0)
-                suffix = "left"
+                suffix = String(localized: "left")
             }
             let displayed = Self.currency(
                 displayedAmount,
@@ -140,9 +140,9 @@ struct BillingUsagePresentation: Equatable {
                 code: currencyCode,
                 locale: locale
             )
-            title = "Extra usage"
+            title = String(localized: "Extra usage")
             valueText = "\(displayed) / \(limit) \(suffix)"
-            accessibilityValue = "\(displayed) \(suffix), \(limit) monthly limit"
+            accessibilityValue = String(localized: "\(displayed) \(suffix), \(limit) monthly limit")
 
         case let .unboundedSpend(usedAmount, currencyCode):
             let used = Self.currency(
@@ -150,9 +150,9 @@ struct BillingUsagePresentation: Equatable {
                 code: currencyCode,
                 locale: locale
             )
-            title = "Extra usage"
-            valueText = "\(used) spent"
-            accessibilityValue = "\(used) spent, no monthly limit"
+            title = String(localized: "Extra usage")
+            valueText = String(localized: "\(used) spent")
+            accessibilityValue = String(localized: "\(used) spent, no monthly limit")
 
         case let .balance(amount, currencyCode):
             let balance = Self.currency(
@@ -160,9 +160,9 @@ struct BillingUsagePresentation: Equatable {
                 code: currencyCode,
                 locale: locale
             )
-            title = "Balance"
-            valueText = "\(balance) left"
-            accessibilityValue = "\(balance) balance remaining"
+            title = String(localized: "Balance")
+            valueText = String(localized: "\(balance) left")
+            accessibilityValue = String(localized: "\(balance) balance remaining")
 
         case let .flexCreditBalance(remainingCredits, usdValue):
             let value = Self.currency(
@@ -171,10 +171,10 @@ struct BillingUsagePresentation: Equatable {
                 locale: locale
             )
             let credits = Self.integer(remainingCredits, locale: locale)
-            title = "Credits"
-            valueText = "\(value) · \(credits) credits left"
+            title = String(localized: "Credits")
+            valueText = String(localized: "\(value) · \(credits) credits left")
             accessibilityValue =
-                "\(credits) Codex credits remaining, worth \(value)"
+                String(localized: "\(credits) Codex credits remaining, worth \(value)")
         }
     }
 
@@ -238,24 +238,31 @@ private struct BillingUsageRow: View {
     }
 }
 
-private struct QuotaGrid: View {
+struct QuotaGrid: View {
     let windows: [QuotaWindow]
     let displayMode: UsageDisplayMode
 
     var body: some View {
+        let rows = Self.rows(for: windows)
         VStack(spacing: 0) {
             ForEach(Array(rows.enumerated()), id: \.offset) { rowIndex, row in
                 HStack(spacing: 0) {
                     ForEach(Array(row.enumerated()), id: \.element.id) { columnIndex, window in
-                        QuotaTile(window: window, displayMode: displayMode)
+                        QuotaTile(
+                            window: window,
+                            displayMode: displayMode,
+                            isCompact: row.count > 2
+                        )
 
-                        if columnIndex == 0, row.count == 2 {
+                        if columnIndex < row.count - 1 {
                             Color(nsColor: .separatorColor)
                                 .opacity(0.42)
-                                .frame(width: 0.5, height: 48)
+                                .frame(width: 0.5)
+                                .padding(.vertical, 6)
                         }
                     }
                 }
+                .fixedSize(horizontal: false, vertical: true)
 
                 if rowIndex < rows.count - 1 {
                     Color(nsColor: .separatorColor)
@@ -267,9 +274,23 @@ private struct QuotaGrid: View {
         }
     }
 
-    private var rows: [[QuotaWindow]] {
-        stride(from: 0, to: windows.count, by: 2).map { index in
-            Array(windows[index..<min(index + 2, windows.count)])
+    /// Starts each pool on a new row so separate allowances never share one.
+    /// When every pool has three windows, as with Droid's Standard and Core
+    /// limits, each pool takes one row so matching periods line up.
+    static func rows(for windows: [QuotaWindow]) -> [[QuotaWindow]] {
+        var pools: [[QuotaWindow]] = []
+        for window in windows {
+            if pools.last?.last?.kind.pool == window.kind.pool {
+                pools[pools.count - 1].append(window)
+            } else {
+                pools.append([window])
+            }
+        }
+        let columns = pools.count > 1 && pools.allSatisfy { $0.count == 3 } ? 3 : 2
+        return pools.flatMap { pool in
+            stride(from: 0, to: pool.count, by: columns).map { index in
+                Array(pool[index..<min(index + columns, pool.count)])
+            }
         }
     }
 }
@@ -277,25 +298,21 @@ private struct QuotaGrid: View {
 private struct QuotaTile: View {
     let window: QuotaWindow
     let displayMode: UsageDisplayMode
+    /// Stacks the value under the title so three tiles fit in one row.
+    var isCompact = false
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 60)) { context in
             VStack(alignment: .leading, spacing: 5) {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(window.kind.title)
-                        .font(.caption.weight(.medium))
-                        .lineLimit(1)
-                    Spacer(minLength: 4)
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(percentText)
-                            .font(.title3.monospacedDigit().weight(.semibold))
-                            .foregroundStyle(valueTint)
-                        Text(displayMode.valueSuffix)
-                            .font(.caption2.weight(.medium))
-                            .foregroundStyle(.secondary)
+                if isCompact {
+                    title
+                    value
+                } else {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        title
+                        Spacer(minLength: 4)
+                        value
                     }
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
                 }
 
                 GeometryReader { geometry in
@@ -336,6 +353,25 @@ private struct QuotaTile: View {
         }
     }
 
+    private var title: some View {
+        Text(window.kind.title)
+            .font(.caption.weight(.medium))
+            .lineLimit(1)
+    }
+
+    private var value: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 3) {
+            Text(percentText)
+                .font(.title3.monospacedDigit().weight(.semibold))
+                .foregroundStyle(valueTint)
+            Text(displayMode.valueSuffix)
+                .font(.caption2.weight(.medium))
+                .foregroundStyle(.secondary)
+        }
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
+    }
+
     private var percentText: String {
         let value = displayMode.displayedPercent(from: window.usedPercent)
         if value.rounded() == value {
@@ -363,19 +399,21 @@ private struct QuotaTile: View {
     private func resetText(_ date: Date, relativeTo now: Date) -> String {
         let remaining = max(0, Int(date.timeIntervalSince(now)))
         if remaining == 0 {
-            return "Resetting"
+            return String(localized: "Resetting")
         }
 
         let days = remaining / 86_400
         let hours = (remaining % 86_400) / 3_600
         let minutes = max(1, (remaining % 3_600) / 60)
         if days > 0 {
-            return hours > 0 ? "Reset \(days)d \(hours)h" : "Reset \(days)d"
+            return hours > 0
+                ? String(localized: "Reset \(days)d \(hours)h")
+                : String(localized: "Reset \(days)d")
         }
         if hours > 0 {
-            return "Reset \(hours)h \(minutes)m"
+            return String(localized: "Reset \(hours)h \(minutes)m")
         }
-        return "Reset \(minutes)m"
+        return String(localized: "Reset \(minutes)m")
     }
 
     private func accessibilityValue(relativeTo now: Date) -> String {
@@ -388,7 +426,7 @@ private struct QuotaTile: View {
 }
 
 private struct ProviderStatusRow: View {
-    let message: String
+    let message: LocalizedStringKey
     var systemImage: String?
     var showsProgress = false
 

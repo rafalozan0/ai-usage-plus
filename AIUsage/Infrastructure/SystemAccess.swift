@@ -362,9 +362,9 @@ enum KeychainError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .interactionRequired: "Keychain access needs your permission."
-        case .readFailed: "Keychain could not be read."
-        case .writeFailed: "Keychain could not be updated."
+        case .interactionRequired: String(localized: "Keychain access needs your permission.")
+        case .readFailed: String(localized: "Keychain could not be read.")
+        case .writeFailed: String(localized: "Keychain could not be updated.")
         }
     }
 }
